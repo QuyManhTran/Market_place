@@ -1,19 +1,26 @@
-import cloudinary from '#config/cloudinary'
+import CloudinaryService from '#services/cloudinary_service'
 import UserService from '#services/user_service'
-import { fileValidator } from '#validators/user'
+import { CloudinaryResponse } from '#types/cloudinary'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
-import app from '@adonisjs/core/services/app'
-import { createWriteStream } from 'node:fs'
-import { pipeline } from 'node:stream/promises'
 
 @inject()
 export default class UsersController {
-    constructor(protected userService: UserService) {}
+    constructor(
+        protected userService: UserService,
+        protected cloudinaryService: CloudinaryService
+    ) {}
 
-    async updateAvatar({ request }: HttpContext) {
-        // const { avatar } = await request.validateUsing(fileValidator)
-        // console.log(avatar)
+    async updateImage({ request, response, auth }: HttpContext) {
+        const column = request.input('column', 'avatars')
+        let cloudinaryResponse: CloudinaryResponse | null = null
+        const user = auth.user
+        if (!user) {
+            return response.unauthorized({
+                result: false,
+                message: 'Unauthorized',
+            })
+        }
 
         request.multipart.onFile(
             'avatar',
@@ -23,27 +30,15 @@ export default class UsersController {
             },
             async (part, reporter) => {
                 part.pause()
-                part.on('data', (buffer) => {
-                    console.log('Received a buffer with length', buffer)
-                })
-                // const filePath = app.makePath(`uploads/${part.file.clientName}`)
-                const uploadStream = cloudinary.uploader.upload_chunked_stream(
-                    {
-                        resource_type: 'image',
-                        folder: 'Market_place/avatars',
-                    },
-                    (error, result) => {
-                        if (error) return error
-                        return result
-                    }
-                )
-                await pipeline(part, uploadStream)
+                part.on('data', reporter)
+                const uploadResponse = await this.cloudinaryService.uploadImage(part, column)
+                cloudinaryResponse = uploadResponse
             }
         )
 
-        /**
-         * Step 2: Process the stream
-         */
         await request.multipart.process()
+        if (cloudinaryResponse === null) return response.internalServerError()
+        const property = request.input('property', 'avatars')
+        return this.userService.uploadImage(property, cloudinaryResponse, user.id)
     }
 }

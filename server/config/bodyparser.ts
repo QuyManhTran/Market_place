@@ -50,6 +50,9 @@ const bodyParserConfig = defineConfig({
         limit: '20mb',
         types: ['multipart/form-data'],
     },
+    raw: {
+        types: ['text/*'],
+    },
 })
 
 export default bodyParserConfig

@@ -31,7 +31,7 @@ router
             .prefix('/auth')
         router
             .group(() => {
-                router.patch('/avatar', [UsersController, 'updateAvatar'])
+                router.patch('/image', [UsersController, 'updateImage'])
             })
             .prefix('/users')
             .use([middleware.auth({ guards: ['api'] }), middleware.role({ role: UserRoles.USER })])
