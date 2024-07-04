@@ -4,7 +4,7 @@ import { BasePolicy } from '@adonisjs/bouncer'
 import { AuthorizerResponse } from '@adonisjs/bouncer/types'
 
 export default class RolePolicy extends BasePolicy {
-    isRightRole(user: User, role: UserRoles): AuthorizerResponse {
-        return user.role === role
+    isRightRole(user: User, roles: UserRoles[]): AuthorizerResponse {
+        return roles.includes(user.role)
     }
 }

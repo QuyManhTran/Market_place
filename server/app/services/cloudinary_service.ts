@@ -13,7 +13,7 @@ export default class CloudinaryService {
                 {
                     resource_type: 'image',
                     folder: `Market_place/${folder}`,
-                    chunk_size: 2 * 1024 * 1024,
+                    chunk_size: 2,
                 },
                 (error, result) => {
                     if (result) return resolve(result)
