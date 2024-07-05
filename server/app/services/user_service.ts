@@ -6,6 +6,7 @@ import { inject } from '@adonisjs/core'
 import CloudinaryService from './cloudinary_service.js'
 import { ProfileUser } from '#types/user'
 import User from '#models/user'
+import { Pagination, PaginationMeta } from '#types/pagination'
 @inject()
 export default class UserService {
     constructor(protected cloudinaryService: CloudinaryService) {}
@@ -61,6 +62,32 @@ export default class UserService {
             result: true,
             data: {
                 background: background.url,
+            },
+        }
+    }
+
+    async search(keyword: string, { curPage, perPage }: Pagination) {
+        const users = await User.query()
+            .where((query) => {
+                keyword && query.where('username', 'like', `%${keyword}%`)
+            })
+            .preload('profile')
+            .paginate(curPage, perPage)
+
+        const meta: PaginationMeta = {
+            total: users.getMeta().total,
+            perPage: users.getMeta().perPage,
+            currentPage: users.getMeta().currentPage,
+            lastPage: users.getMeta().lastPage,
+            firstPage: users.getMeta().firstPage,
+        }
+        return {
+            result: true,
+            data: {
+                users: {
+                    meta,
+                    data: users.all(),
+                },
             },
         }
     }

@@ -10,7 +10,9 @@ export default class StoresController {
     /**
      * Display a list of resource
      */
-    async index({}: HttpContext) {}
+    async index({ pagination }: HttpContext) {
+        return this.storeService.index(pagination)
+    }
 
     /**
      * Display form to create a new record
@@ -29,7 +31,9 @@ export default class StoresController {
     /**
      * Show individual record
      */
-    async show({ params }: HttpContext) {}
+    async show({ params }: HttpContext) {
+        return this.storeService.show(params.id)
+    }
 
     /**
      * Edit individual record

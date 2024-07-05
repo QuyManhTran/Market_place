@@ -49,4 +49,9 @@ export default class UsersController {
         if (cloudinaryResponse === null) return response.internalServerError()
         return this.userService.uploadImage(column, cloudinaryResponse, user.id)
     }
+
+    async search({ request, pagination }: HttpContext) {
+        const keyword = request.input('keyword', '')
+        return this.userService.search(keyword, pagination)
+    }
 }

@@ -5,6 +5,8 @@ import { CloudinaryResponse } from '#types/cloudinary'
 import { CreateProduct } from '#types/product'
 import { inject } from '@adonisjs/core'
 import CloudinaryService from './cloudinary_service.js'
+import { Pagination, PaginationMeta } from '#types/pagination'
+import { Exception } from '@adonisjs/core/exceptions'
 @inject()
 export default class ProductService {
     constructor(protected cloudinaryService: CloudinaryService) {}
@@ -64,6 +66,53 @@ export default class ProductService {
             }
         }
         await product.load('image')
+        return {
+            result: true,
+            data: {
+                product,
+            },
+        }
+    }
+
+    async index({ curPage, perPage }: Pagination, keyword: string) {
+        const products = await Product.query()
+            .where((query) => {
+                keyword &&
+                    query
+                        .where('name', 'like', `%${keyword}%`)
+                        .orWhere('description', 'like', `%${keyword}%`)
+            })
+            .preload('image')
+            .paginate(curPage, perPage)
+        const meta: PaginationMeta = {
+            total: products.getMeta().total,
+            perPage: products.getMeta().perPage,
+            currentPage: products.getMeta().currentPage,
+            lastPage: products.getMeta().lastPage,
+            firstPage: products.getMeta().firstPage,
+        }
+        return {
+            result: true,
+            data: {
+                products: {
+                    meta,
+                    data: products.all(),
+                },
+            },
+        }
+    }
+
+    async show(storeId: number, productId: number) {
+        const product = await Product.query()
+            .where({ id: productId, storeId })
+            .preload('image')
+            .first()
+        if (!product) {
+            throw new Exception('Product not found', {
+                code: 'E_NOT_FOUND',
+                status: 404,
+            })
+        }
         return {
             result: true,
             data: {

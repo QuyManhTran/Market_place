@@ -15,7 +15,10 @@ export default class ProductsController {
     /**
      * Display a list of resource
      */
-    async index({}: HttpContext) {}
+    async index({ pagination, request }: HttpContext) {
+        const keyword = request.input('keyword', '')
+        return this.productService.index(pagination, keyword)
+    }
 
     /**
      * Display form to create a new record
@@ -59,7 +62,9 @@ export default class ProductsController {
     /**
      * Show individual record
      */
-    async show({ params }: HttpContext) {}
+    async show({ params }: HttpContext) {
+        return this.productService.show(params.store_id, params.id)
+    }
 
     /**
      * Edit individual record

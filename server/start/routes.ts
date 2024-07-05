@@ -50,11 +50,12 @@ router
                         router.patch('/image', [UsersController, 'updateImage'])
                     })
                     .prefix('/edit')
+                router.get('/search', [UsersController, 'search']).use(middleware.pagination())
             })
             .prefix('/users')
             .use([
                 middleware.auth({ guards: ['api'] }),
-                middleware.role({ roles: [UserRoles.USER] }),
+                middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
             ])
         /**
          * Store routes
@@ -72,6 +73,18 @@ router
                     middleware.role({ roles: [UserRoles.SELLER] }),
                 ]
             )
+            .use(
+                ['index'],
+                [
+                    middleware.auth({ guards: ['api'] }),
+                    middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
+                    middleware.pagination(),
+                ]
+            )
+            .use('show', [
+                middleware.auth({ guards: ['api'] }),
+                middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
+            ])
 
         /**
          * Product routes
@@ -83,6 +96,21 @@ router
                 [
                     middleware.auth({ guards: ['api'] }),
                     middleware.role({ roles: [UserRoles.SELLER] }),
+                ]
+            )
+            .use(
+                ['index'],
+                [
+                    middleware.auth({ guards: ['api'] }),
+                    middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
+                    middleware.pagination(),
+                ]
+            )
+            .use(
+                ['show'],
+                [
+                    middleware.auth({ guards: ['api'] }),
+                    middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
                 ]
             )
     })
