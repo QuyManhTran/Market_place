@@ -15,6 +15,9 @@ export default class AuthService {
         const profile = await user.related('profile').create({})
         await profile.related('avatar').create({})
         await profile.related('background').create({})
+        await user.related('cart').create({
+            total: 0,
+        })
         await user.load('profile', (builder) => {
             builder.preload('avatar')
             builder.preload('background')

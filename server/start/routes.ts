@@ -11,6 +11,7 @@ const AuthController = () => import('#controllers/auth_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 import { UserRoles } from '#enums/user'
+const CartsController = () => import('#controllers/carts_controller')
 const ProductsController = () => import('#controllers/products_controller')
 const StoresController = () => import('#controllers/stores_controller')
 const UsersController = () => import('#controllers/users_controller')
@@ -113,5 +114,23 @@ router
                     middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
                 ]
             )
+
+        /**
+         * Cart routes
+         */
+
+        router
+            .resource('users.carts', CartsController)
+            .use(
+                ['index', 'store', 'destroy'],
+                [
+                    middleware.auth({ guards: ['api'] }),
+                    middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
+                ]
+            )
+            .where('user_id', {
+                match: /^[0-9]+$/,
+                cast: (id) => Number(id),
+            })
     })
     .prefix('/api/v1')

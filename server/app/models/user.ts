@@ -11,8 +11,8 @@ import { UserRoles } from '#enums/user'
 import env from '#start/env'
 import Profile from './profile.js'
 import type { HasOne } from '@adonisjs/lucid/types/relations'
-import { has } from 'lodash'
 import Store from './store.js'
+import Cart from './cart.js'
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
     uids: ['email'],
     passwordColumnName: 'password',
@@ -55,6 +55,12 @@ export default class User extends compose(BaseModel, AuthFinder) {
         serializeAs: 'store',
     })
     declare store: HasOne<typeof Store>
+
+    @hasOne(() => Cart, {
+        localKey: 'id',
+        foreignKey: 'userId',
+    })
+    declare cart: HasOne<typeof Cart>
 
     static accessTokens = JwtAccessTokenProvider.forModel(User, {
         expiresInMillis: parseDuration(JwtExpiration.ACCESS)!,
