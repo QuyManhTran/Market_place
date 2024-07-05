@@ -3,7 +3,7 @@ import User from '#models/user'
 import CloudinaryService from '#services/cloudinary_service'
 import ProductService from '#services/product_service'
 import { CloudinaryResponse } from '#types/cloudinary'
-import { productValidator } from '#validators/product'
+import { productValidator, updateProductValidator } from '#validators/product'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 @inject()
@@ -71,7 +71,6 @@ export default class ProductsController {
      */
     async update({ params, request, response, auth }: HttpContext) {
         const isChangeImage = request.input('isChangeImage', 'false') === 'true'
-        console.log(isChangeImage)
         let cloudinaryResponse: CloudinaryResponse | null = null
         const user = auth.user as User
         request.multipart.onFile(
@@ -83,20 +82,24 @@ export default class ProductsController {
             async (part, reporter) => {
                 part.pause()
                 part.on('data', reporter)
-                // const uploadResponse = await this.cloudinaryService.uploadImage(part, 'products')
-                // cloudinaryResponse = uploadResponse
+                if (isChangeImage) {
+                    const uploadResponse = await this.cloudinaryService.uploadImage(
+                        part,
+                        'products'
+                    )
+                    cloudinaryResponse = uploadResponse
+                }
             }
         )
-        if (isChangeImage) await request.multipart.process()
-        console.log(cloudinaryResponse)
-        if (cloudinaryResponse === null) return response.internalServerError()
+        await request.multipart.process()
         const rawData = request.only(['name', 'description', 'price', 'status'])
-        const data = await productValidator.validate(rawData)
-        const result = await this.productService.store(
-            { ...data, status: ProductStatus.INACTIVE },
+        const data = await updateProductValidator.validate(rawData)
+        const result = await this.productService.update(
+            { ...data },
             cloudinaryResponse,
             user.id,
-            params.store_id
+            params.store_id,
+            params.id
         )
         response.created(result)
     }

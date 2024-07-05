@@ -13,7 +13,7 @@ export default class ProductImage extends BaseModel {
     @column()
     declare url: string
 
-    @column({ columnName: 'public_id' })
+    @column({ columnName: 'public_id', serializeAs: null })
     declare publicId: string
 
     @column.dateTime({ autoCreate: true, serializeAs: null })
