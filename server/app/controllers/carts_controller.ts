@@ -30,17 +30,17 @@ export default class CartsController {
     /**
      * Show individual record
      */
-    async show({ params }: HttpContext) {}
+    // async show({ params }: HttpContext) {}
 
     /**
      * Edit individual record
      */
-    async edit({ params }: HttpContext) {}
+    // async edit({ params }: HttpContext) {}
 
     /**
      * Handle form submission for the edit action
      */
-    async update({ params }: HttpContext) {}
+    // async update({ params }: HttpContext) {}
 
     /**
      * Delete record

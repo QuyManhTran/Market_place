@@ -2,7 +2,7 @@ import User from '#models/user'
 import CloudinaryService from '#services/cloudinary_service'
 import UserService from '#services/user_service'
 import { CloudinaryResponse } from '#types/cloudinary'
-import { fileImageValidator, profileValidator } from '#validators/user'
+import { fileImageValidator, profileValidator, topUpValidator } from '#validators/user'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 
@@ -53,5 +53,11 @@ export default class UsersController {
     async search({ request, pagination }: HttpContext) {
         const keyword = request.input('keyword', '')
         return this.userService.search(keyword, pagination)
+    }
+
+    async topUp({ request, auth }: HttpContext) {
+        const rawData = request.only(['amount'])
+        const data = await topUpValidator.validate(rawData)
+        return this.userService.topUp(data.amount, auth.user as User)
     }
 }

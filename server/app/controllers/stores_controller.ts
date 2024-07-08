@@ -38,7 +38,7 @@ export default class StoresController {
     /**
      * Edit individual record
      */
-    async edit({ params }: HttpContext) {}
+    async edit({}: HttpContext) {}
 
     /**
      * Handle form submission for the edit action
@@ -52,5 +52,5 @@ export default class StoresController {
     /**
      * Delete record
      */
-    async destroy({ params }: HttpContext) {}
+    async destroy({}: HttpContext) {}
 }

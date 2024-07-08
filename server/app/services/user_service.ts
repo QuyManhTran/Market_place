@@ -91,4 +91,12 @@ export default class UserService {
             },
         }
     }
+
+    async topUp(amount: number, user: User) {
+        await user.merge({ balance: user.balance + amount }).save()
+        return {
+            result: true,
+            user,
+        }
+    }
 }

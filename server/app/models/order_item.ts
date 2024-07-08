@@ -1,27 +1,30 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import Cart from './cart.js'
+import Order from './order.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Product from './product.js'
 
-export default class CartItem extends BaseModel {
+export default class OrderItem extends BaseModel {
     @column({ isPrimary: true })
     declare id: number
 
-    @column({ columnName: 'cart_id' })
-    declare cartId: number
+    @column({ columnName: 'order_id' })
+    declare orderId: number
 
     @column({ columnName: 'product_id' })
     declare productId: number
 
-    @column.dateTime({ autoCreate: true, serializeAs: null })
+    @column.dateTime({ autoCreate: true })
     declare createdAt: DateTime
 
-    @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
+    @column.dateTime({ autoCreate: true, autoUpdate: true })
     declare updatedAt: DateTime
 
-    @belongsTo(() => Cart)
-    declare cart: BelongsTo<typeof Cart>
+    @belongsTo(() => Order, {
+        foreignKey: 'orderId',
+        localKey: 'id',
+    })
+    declare order: BelongsTo<typeof Order>
 
     @belongsTo(() => Product, {
         foreignKey: 'productId',

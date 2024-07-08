@@ -23,3 +23,9 @@ export const fileImageValidator = vine.compile(
         column: vine.enum(['avatars', 'backgrounds']),
     })
 )
+
+export const topUpValidator = vine.compile(
+    vine.object({
+        amount: vine.number().min(1000),
+    })
+)

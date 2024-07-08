@@ -7,6 +7,7 @@ import { inject } from '@adonisjs/core'
 import CloudinaryService from './cloudinary_service.js'
 import { Pagination, PaginationMeta } from '#types/pagination'
 import { Exception } from '@adonisjs/core/exceptions'
+import { ProductStatus } from '#enums/product'
 @inject()
 export default class ProductService {
     constructor(protected cloudinaryService: CloudinaryService) {}
@@ -77,10 +78,15 @@ export default class ProductService {
     async index({ curPage, perPage }: Pagination, keyword: string) {
         const products = await Product.query()
             .where((query) => {
-                keyword &&
-                    query
-                        .where('name', 'like', `%${keyword}%`)
-                        .orWhere('description', 'like', `%${keyword}%`)
+                keyword
+                    ? query
+                          .where((inQuery) => {
+                              inQuery
+                                  .where('name', 'like', `%${keyword}%`)
+                                  .orWhere('description', 'like', `%${keyword}%`)
+                          })
+                          .andWhere('status', ProductStatus.ACTIVE)
+                    : query.where('status', ProductStatus.ACTIVE)
             })
             .preload('image')
             .paginate(curPage, perPage)

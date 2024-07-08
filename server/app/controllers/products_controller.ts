@@ -51,7 +51,7 @@ export default class ProductsController {
         const rawData = request.only(['name', 'description', 'price', 'status'])
         const data = await productValidator.validate(rawData)
         const result = await this.productService.store(
-            { ...data, status: ProductStatus.INACTIVE },
+            { ...data, status: ProductStatus.ACTIVE },
             cloudinaryResponse,
             user.id,
             params.store_id
@@ -69,7 +69,7 @@ export default class ProductsController {
     /**
      * Edit individual record
      */
-    async edit({ params }: HttpContext) {}
+    // async edit({ params }: HttpContext) {}
 
     /**
      * Handle form submission for the edit action
@@ -112,5 +112,5 @@ export default class ProductsController {
     /**
      * Delete record
      */
-    async destroy({ params }: HttpContext) {}
+    // async destroy({ params }: HttpContext) {}
 }
