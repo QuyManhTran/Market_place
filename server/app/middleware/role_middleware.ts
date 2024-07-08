@@ -5,11 +5,11 @@ import { ResponseStatus, type HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 
 export default class RoleMiddleware {
-    async handle(ctx: HttpContext, next: NextFn, { role }: UserRole) {
+    async handle(ctx: HttpContext, next: NextFn, { roles }: UserRole) {
         /**
          * Middleware logic goes here (before the next call)
          */
-        if (await ctx.bouncer.with(RolePolicy).denies('isRightRole', role)) {
+        if (await ctx.bouncer.with(RolePolicy).denies('isRightRole', roles)) {
             throw new Exception('Unauthorized access', {
                 status: ResponseStatus.Forbidden,
                 code: 'E_UNAUTHORIZED_ACCESS',
