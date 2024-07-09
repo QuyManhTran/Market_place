@@ -39,6 +39,9 @@ router
                 router
                     .post('/refresh', [AuthController, 'refresh'])
                     .use(middleware.auth({ guards: ['api'] }))
+                router
+                    .delete('/logout', [AuthController, 'logout'])
+                    .use(middleware.auth({ guards: ['api'] }))
             })
             .prefix('/auth')
         /**

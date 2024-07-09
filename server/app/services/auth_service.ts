@@ -18,15 +18,10 @@ export default class AuthService {
         await user.related('cart').create({
             total: 0,
         })
-        await user.load('profile', (builder) => {
-            builder.preload('avatar')
-            builder.preload('background')
-        })
+
         return {
             result: true,
-            data: {
-                user: user,
-            },
+            message: 'User registered successfully',
         }
     }
 
