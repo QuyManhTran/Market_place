@@ -36,9 +36,7 @@ router
             .group(() => {
                 router.post('/register', [AuthController, 'register'])
                 router.post('/login', [AuthController, 'login'])
-                router
-                    .post('/refresh', [AuthController, 'refresh'])
-                    .use(middleware.auth({ guards: ['api'] }))
+                router.post('/refresh', [AuthController, 'refresh'])
                 router
                     .delete('/logout', [AuthController, 'logout'])
                     .use(middleware.auth({ guards: ['api'] }))

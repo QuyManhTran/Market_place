@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import type { FormProps } from 'antd';
-import { Button, Form, Input, Typography } from 'antd';
-import { Link } from 'react-router-dom';
+import { Alert, Button, Form, Input, Typography } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 import { login } from '@/services/auth';
 import { AppDispatch } from '@/redux/store';
 import { useDispatch } from 'react-redux';
 import { UserAction } from '@/redux/slices/user';
+import { CheckCircleFilled } from '@ant-design/icons';
 
 type FieldType = {
     email: string;
@@ -15,6 +16,8 @@ type FieldType = {
 const Login: React.FC = () => {
     const dispath: AppDispatch = useDispatch();
     const [loading, setLoading] = useState<boolean>(false);
+    const [isSuccess, setIsSuccess] = useState<boolean>(false);
+    const navigate = useNavigate();
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         console.log('Success:', values);
         try {
@@ -23,6 +26,8 @@ const Login: React.FC = () => {
             console.log(response.data);
             if (!response.data.result) throw new Error(response.data?.message);
             dispath(UserAction.setUser(response.data.data!));
+            setIsSuccess(true);
+            navigate('/');
         } catch (error) {
             console.log(error);
         } finally {
@@ -35,6 +40,15 @@ const Login: React.FC = () => {
     };
     return (
         <>
+            {isSuccess && (
+                <Alert
+                    message={'Login successfully !'}
+                    type="success"
+                    closable
+                    showIcon
+                    icon={<CheckCircleFilled />}
+                />
+            )}
             <Typography.Title level={1}>Login</Typography.Title>
             <Form
                 name="basic"

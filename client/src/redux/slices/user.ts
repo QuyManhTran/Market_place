@@ -1,5 +1,6 @@
+import { refresh } from '@/services/auth';
 import { IUserState } from '@/types/user';
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: IUserState = {
@@ -39,13 +40,25 @@ const initialState: IUserState = {
     },
 };
 
+export const freshUser = createAsyncThunk('user/fresh', async () => {
+    const response = await refresh();
+    return response.data;
+});
+
 export const UserSlice = createSlice({
     name: 'counter',
     initialState,
     reducers: {
         setUser: (state, action: PayloadAction<IUserState>) => {
-            state = action.payload;
+            state.accessToken = action.payload.accessToken;
+            state.user = action.payload.user;
         },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(freshUser.fulfilled, (state, action) => {
+            state.accessToken = action.payload.data?.accessToken || initialState.accessToken;
+            state.user = action.payload.data?.user || initialState.user;
+        });
     },
 });
 

@@ -5,11 +5,12 @@ const request = axios.create({
     baseURL:
         `${process.env.REACT_APP_HOST}/api/${process.env.REACT_APP_API_VERSION}` ||
         'http://localhost:3333/api/v1',
+    withCredentials: true,
 });
 
-axios.interceptors.request.use(function (config) {
+request.interceptors.request.use(function (config) {
     const token = store.getState().user.accessToken.token;
-    config.headers.Authorization = token;
+    config.headers.Authorization = 'Bearer ' + token;
     return config;
 });
 

@@ -9,3 +9,7 @@ export const login = async (data: ILoginPayload) => {
 export const register = async (data: IRegisterPayload) => {
     return request.post<BaseResponse<any>>(`/auth/register`, data);
 };
+
+export const refresh = async () => {
+    return request.post<UserResponse>(`/auth/refresh`);
+};
