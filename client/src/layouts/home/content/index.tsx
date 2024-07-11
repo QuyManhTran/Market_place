@@ -1,29 +1,35 @@
 import ProductItem from '@/components/home/product-item';
 import { RootState } from '@/redux/store';
 import { searchProduct } from '@/services/product';
-import { IProduct } from '@/types/product';
-import { Flex } from 'antd';
+import { IMeta, IProduct } from '@/types/product';
+import { Flex, Pagination, PaginationProps } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const contentStyle: React.CSSProperties = {
     minHeight: 120,
+    padding: '120px 0px',
 };
 
 const HomeContent = () => {
     const user = useSelector((state: RootState) => state.user);
     const [products, setProducts] = useState<IProduct[]>([]);
+    const [meta, setMeta] = useState<IMeta>();
+    const [limit, setLimit] = useState<number>(10);
+    const [cur, setCur] = useState<number>(1);
+
+    const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
+        setLimit(pageSize);
+        setCur(current);
+    };
 
     const fetchProducts = async () => {
         try {
-            const response = await searchProduct();
+            const response = await searchProduct({ cur_page: cur, per_page: limit });
             if (response.data.result && response.data?.data) {
-                console.log(
-                    'fetchProducts -> response.data.data.products.data',
-                    response.data.data.products.data,
-                );
                 setProducts(response.data.data.products.data);
+                setMeta(response.data.data.products.meta);
             }
         } catch (error) {
             console.log('fetchProducts -> error', error);
@@ -36,18 +42,34 @@ const HomeContent = () => {
         }
     }, [user]);
 
+    useEffect(() => {
+        if (cur && user.accessToken.token) fetchProducts();
+    }, [cur]);
+
     return (
         <Content style={contentStyle}>
             <Flex
-                gap={12}
+                gap={24}
                 wrap
                 style={{
-                    padding: '12px 24px',
+                    padding: '12px 64px',
                 }}
+                justify="start"
             >
                 {products.length &&
                     products.map((product, index) => <ProductItem key={index} product={product} />)}
             </Flex>
+            {meta && (
+                <Flex justify="center">
+                    <Pagination
+                        showSizeChanger
+                        onShowSizeChange={onShowSizeChange}
+                        onChange={onShowSizeChange}
+                        defaultCurrent={cur}
+                        total={meta.total}
+                    />
+                </Flex>
+            )}
         </Content>
     );
 };

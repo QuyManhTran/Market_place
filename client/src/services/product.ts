@@ -7,6 +7,6 @@ export const searchProduct = async (
     keyword: string = '',
 ) => {
     return request.get<SearchProductResponse>('/stores/4/products', {
-        params: page,
+        params: { ...page, keyword },
     });
 };

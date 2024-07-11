@@ -8,6 +8,7 @@ const footerStyle: React.CSSProperties = {
     justifyContent: 'space-between',
     color: 'black',
     padding: '12px 48px',
+    height: 100,
 };
 const HomeFooter = () => {
     return (
