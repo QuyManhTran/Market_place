@@ -5,12 +5,12 @@ import { Input } from 'antd';
 import logo from '@/assets/images/logo.png';
 import { Link } from 'react-router-dom';
 import { SearchOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { IProduct } from '@/types/product';
 import { searchProduct } from '@/services/product';
+import { useStore } from 'zustand';
+import { userStore } from '@/zustand/user';
 
 const { Search } = Input;
 
@@ -32,7 +32,7 @@ const headerStyle: React.CSSProperties = {
 };
 
 const HomeHeader = () => {
-    const user = useSelector((state: RootState) => state.user);
+    const { user } = userStore();
     const [keyword, setKeyword] = useState<string>('');
     const [products, setProducts] = useState<IProduct[]>([]);
 
@@ -164,16 +164,23 @@ const HomeHeader = () => {
                         <Typography.Text style={{ cursor: 'pointer', fontWeight: 600 }}>
                             {user.user.username}
                         </Typography.Text>
-                        <img
-                            width={32}
-                            height={32}
-                            src={'https://img.icons8.com/dusk/64/cheap-2.png'}
-                            style={{ objectFit: 'cover', marginLeft: 8 }}
-                            alt="balance"
-                        />
-                        <Typography.Text style={{ cursor: 'pointer' }}>
-                            {user.user.balance}
-                        </Typography.Text>
+                        <Link
+                            to={{
+                                pathname: '/account/profile',
+                            }}
+                            style={{}}
+                        >
+                            <img
+                                width={32}
+                                height={32}
+                                src={'https://img.icons8.com/dusk/64/cheap-2.png'}
+                                style={{ objectFit: 'cover', marginLeft: 8 }}
+                                alt="balance"
+                            />
+                            <Typography.Text style={{ cursor: 'pointer' }}>
+                                {user.user.balance}
+                            </Typography.Text>
+                        </Link>
                     </>
                 )}
             </Flex>

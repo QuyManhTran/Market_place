@@ -1,4 +1,4 @@
-import { store } from '@/redux/store';
+import { userStore } from '@/zustand/user';
 import axios from 'axios';
 
 const request = axios.create({
@@ -9,7 +9,7 @@ const request = axios.create({
 });
 
 request.interceptors.request.use(function (config) {
-    const token = store.getState().user.accessToken.token;
+    const token = userStore.getState().user.accessToken.token;
     config.headers.Authorization = 'Bearer ' + token;
     return config;
 });

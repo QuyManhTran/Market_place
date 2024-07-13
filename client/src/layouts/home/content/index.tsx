@@ -1,11 +1,10 @@
 import ProductItem from '@/components/home/product-item';
-import { RootState } from '@/redux/store';
 import { searchProduct } from '@/services/product';
 import { IMeta, IProduct } from '@/types/product';
+import { userStore } from '@/zustand/user';
 import { Flex, Pagination, PaginationProps } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 const contentStyle: React.CSSProperties = {
     minHeight: 120,
@@ -13,7 +12,7 @@ const contentStyle: React.CSSProperties = {
 };
 
 const HomeContent = () => {
-    const user = useSelector((state: RootState) => state.user);
+    const { user } = userStore();
     const [products, setProducts] = useState<IProduct[]>([]);
     const [meta, setMeta] = useState<IMeta>();
     const [limit, setLimit] = useState<number>(10);

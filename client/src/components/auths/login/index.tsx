@@ -3,18 +3,13 @@ import type { FormProps } from 'antd';
 import { Alert, Button, Form, Input, Typography } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '@/services/auth';
-import { AppDispatch } from '@/redux/store';
-import { useDispatch } from 'react-redux';
-import { UserAction } from '@/redux/slices/user';
 import { CheckCircleFilled } from '@ant-design/icons';
-
 type FieldType = {
     email: string;
     password: string;
 };
 
 const Login: React.FC = () => {
-    const dispath: AppDispatch = useDispatch();
     const [loading, setLoading] = useState<boolean>(false);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -25,7 +20,7 @@ const Login: React.FC = () => {
             const response = await login({ ...values });
             console.log(response.data);
             if (!response.data.result) throw new Error(response.data?.message);
-            dispath(UserAction.setUser(response.data.data!));
+            // dispath(setUser(response.data.data!));
             setIsSuccess(true);
             navigate('/');
         } catch (error) {

@@ -32,3 +32,7 @@ export interface IPagination {
     per_page: number;
     cur_page: number;
 }
+
+export interface IUpdateAvatar {
+    avatar: string;
+}

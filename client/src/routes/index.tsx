@@ -1,5 +1,6 @@
 import Privacy from '@/components/account/privacy';
 import Profile from '@/components/account/profile';
+import Wallet from '@/components/account/wallet';
 import Login from '@/components/auths/login';
 import Register from '@/components/auths/register';
 import AccountPage from '@/page/account';
@@ -14,6 +15,20 @@ const AppRouter = () => {
             element: <HomePage />,
         },
         {
+            path: 'auth',
+            element: <AuthPage />,
+            children: [
+                {
+                    path: 'login',
+                    element: <Login />,
+                },
+                {
+                    path: 'register',
+                    element: <Register />,
+                },
+            ],
+        },
+        {
             path: 'account',
             element: <AccountPage />,
             children: [
@@ -25,19 +40,9 @@ const AppRouter = () => {
                     path: 'privacy',
                     element: <Privacy />,
                 },
-            ],
-        },
-        {
-            path: 'auth',
-            element: <AuthPage />,
-            children: [
                 {
-                    path: 'login',
-                    element: <Login />,
-                },
-                {
-                    path: 'register',
-                    element: <Register />,
+                    path: 'wallet',
+                    element: <Wallet />,
                 },
             ],
         },

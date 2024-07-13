@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-import {
-    DesktopOutlined,
-    FileOutlined,
-    PieChartOutlined,
-    TeamOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
+import { FileOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Breadcrumb, Image, Layout, Menu, theme } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
-
+import logo from '@/assets/images/logo.png';
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -60,7 +54,18 @@ const AccountPage: React.FC = () => {
                 />
             </Sider>
             <Layout>
-                <Header style={{ padding: 0, background: colorBgContainer }} />
+                <Header style={{ padding: 0, background: colorBgContainer, height: 80 }}>
+                    <Image
+                        onClick={() => navigate('/')}
+                        preview={false}
+                        src={logo}
+                        style={{
+                            objectFit: 'cover',
+                            height: 80,
+                            cursor: 'pointer',
+                        }}
+                    />
+                </Header>
                 <Content style={{ margin: '0 16px' }}>
                     <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>User</Breadcrumb.Item>
