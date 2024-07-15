@@ -10,12 +10,12 @@ export default class OrderService {
         const orders = await user
             .related('orders')
             .query()
-            .preload('items', (builder) => {
-                builder.preload('product', (productBuilder) => {
-                    productBuilder.preload('image')
-                    productBuilder.preload('store')
-                })
-            })
+            // .preload('items', (builder) => {
+            //     builder.preload('product', (productBuilder) => {
+            //         productBuilder.preload('image')
+            //         productBuilder.preload('store')
+            //     })
+            // })
             .preload('payment')
         return {
             result: true,

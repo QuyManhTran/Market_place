@@ -40,3 +40,7 @@ export interface IAcessToken {
     lastUsedAt: string;
     expiresAt: string;
 }
+
+export interface IUpdateProfile {
+    username?: string;
+}

@@ -1,8 +1,9 @@
 import ProductItem from '@/components/home/product-item';
 import { searchProduct } from '@/services/product';
 import { IMeta, IProduct } from '@/types/product';
+import { cartStore } from '@/zustand/my-cart';
 import { userStore } from '@/zustand/user';
-import { Flex, Pagination, PaginationProps } from 'antd';
+import { Flex, Pagination, PaginationProps, Spin } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { useEffect, useState } from 'react';
 
@@ -13,10 +14,12 @@ const contentStyle: React.CSSProperties = {
 
 const HomeContent = () => {
     const { user } = userStore();
+    const { cart } = cartStore();
     const [products, setProducts] = useState<IProduct[]>([]);
     const [meta, setMeta] = useState<IMeta>();
     const [limit, setLimit] = useState<number>(10);
     const [cur, setCur] = useState<number>(1);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
         setLimit(pageSize);
@@ -25,6 +28,7 @@ const HomeContent = () => {
 
     const fetchProducts = async () => {
         try {
+            setLoading(true);
             const response = await searchProduct({ cur_page: cur, per_page: limit });
             if (response.data.result && response.data?.data) {
                 setProducts(response.data.data.products.data);
@@ -32,10 +36,13 @@ const HomeContent = () => {
             }
         } catch (error) {
             console.log('fetchProducts -> error', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
+        if (!user.accessToken.token) setLoading(true);
         if (user.accessToken.token) {
             fetchProducts();
         }
@@ -47,17 +54,31 @@ const HomeContent = () => {
 
     return (
         <Content style={contentStyle}>
-            <Flex
-                gap={24}
-                wrap
-                style={{
-                    padding: '12px 64px',
-                }}
-                justify="start"
-            >
-                {products.length &&
-                    products.map((product, index) => <ProductItem key={index} product={product} />)}
-            </Flex>
+            {!loading && (
+                <Flex
+                    gap={24}
+                    wrap
+                    style={{
+                        padding: '12px 64px',
+                    }}
+                    justify="start"
+                >
+                    {products.length &&
+                        products.map((product, index) => (
+                            <ProductItem
+                                key={index}
+                                product={product}
+                                cart={cart.items || []}
+                                userId={user.user.id}
+                            />
+                        ))}
+                </Flex>
+            )}
+            {loading && (
+                <Flex justify="center">
+                    <Spin size="large" />
+                </Flex>
+            )}
             {meta && (
                 <Flex justify="center">
                     <Pagination

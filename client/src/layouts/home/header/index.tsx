@@ -156,19 +156,34 @@ const HomeHeader = () => {
                 )}
                 {user.user.username && (
                     <>
-                        <Avatar
-                            size={40}
-                            src={user.user.profile.avatar.url}
-                            style={{ cursor: 'pointer' }}
-                        />
-                        <Typography.Text style={{ cursor: 'pointer', fontWeight: 600 }}>
-                            {user.user.username}
-                        </Typography.Text>
                         <Link
                             to={{
                                 pathname: '/account/profile',
                             }}
-                            style={{}}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8,
+                            }}
+                        >
+                            <Avatar
+                                size={40}
+                                src={user.user.profile.avatar.url}
+                                style={{ cursor: 'pointer' }}
+                            />
+                            <Typography.Text style={{ cursor: 'pointer', fontWeight: 600 }}>
+                                {user.user.username}
+                            </Typography.Text>
+                        </Link>
+                        <Link
+                            to={{
+                                pathname: '/account/profile',
+                            }}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8,
+                            }}
                         >
                             <img
                                 width={32}

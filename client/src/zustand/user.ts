@@ -5,6 +5,7 @@ export interface IUserStore {
     user: IUserState;
     setUser: (data: IUserState) => void;
     setAvatar: (data: string) => void;
+    setProfile: (data: string) => void;
 }
 const initialState: IUserState = {
     user: {
@@ -55,6 +56,14 @@ export const userStore = create<IUserStore>((set) => ({
                     ...state.user.user.profile,
                     avatar: { ...state.user.user.profile.avatar, url: data },
                 },
+            },
+        })),
+    setProfile: (data: string) =>
+        set((state) => ({
+            ...state,
+            user: {
+                ...state.user,
+                user: { ...state.user.user, username: data },
             },
         })),
 }));

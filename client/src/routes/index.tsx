@@ -1,3 +1,5 @@
+import Cart from '@/components/account/cart';
+import Order from '@/components/account/order';
 import Privacy from '@/components/account/privacy';
 import Profile from '@/components/account/profile';
 import Wallet from '@/components/account/wallet';
@@ -43,6 +45,14 @@ const AppRouter = () => {
                 {
                     path: 'wallet',
                     element: <Wallet />,
+                },
+                {
+                    path: 'cart',
+                    element: <Cart />,
+                },
+                {
+                    path: 'order',
+                    element: <Order />,
                 },
             ],
         },
