@@ -1,15 +1,22 @@
 import User from '#models/user'
 import OrderService from '#services/order_service'
+import RedisService from '#services/redis_service'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 @inject()
 export default class OrdersController {
-    constructor(protected orderService: OrderService) {}
+    constructor(
+        protected orderService: OrderService,
+        protected redisService: RedisService
+    ) {}
     /**
      * Display a list of resource
      */
     async index({ auth }: HttpContext) {
-        return this.orderService.index(auth.user as User)
+        return this.redisService.get(`${auth.user?.id}/orders`, () =>
+            this.orderService.index(auth.user as User)
+        )
+        // return this.orderService.index(auth.user as User)
     }
 
     /**
