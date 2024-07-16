@@ -4,12 +4,15 @@ import { Alert, Button, Form, Input, Typography } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '@/services/auth';
 import { CheckCircleFilled } from '@ant-design/icons';
+import { userStore } from '@/zustand/user';
+import { IUserState } from '@/types/user';
 type FieldType = {
     email: string;
     password: string;
 };
 
 const Login: React.FC = () => {
+    const { setUser } = userStore();
     const [loading, setLoading] = useState<boolean>(false);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -20,7 +23,7 @@ const Login: React.FC = () => {
             const response = await login({ ...values });
             console.log(response.data);
             if (!response.data.result) throw new Error(response.data?.message);
-            // dispath(setUser(response.data.data!));
+            setUser(response.data.data as IUserState);
             setIsSuccess(true);
             navigate('/');
         } catch (error) {

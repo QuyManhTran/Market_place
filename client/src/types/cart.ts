@@ -12,11 +12,14 @@ export interface Icart {
     price: number;
 }
 
-export interface ICartItem {
+export interface IBaseItem {
     id: number;
-    cartId: number;
-    productId: number;
     product: IProduct;
+    productId: number;
+}
+
+export interface ICartItem extends IBaseItem {
+    cartId: number;
 }
 
 export interface IAddCart {

@@ -3,6 +3,7 @@ import { IAddCart } from '@/types/cart';
 import {
     CartResponse,
     RemoveCartItem,
+    TopUpResponse,
     UpdateAvatarResponse,
     updateProfileResponse,
 } from '@/types/request';
@@ -34,4 +35,8 @@ export const addItemCart = async (data: IAddCart, userId: number) => {
 
 export const removeItemCart = async (userId: number, itemId: number) => {
     return request.delete<RemoveCartItem>(`/users/${userId}/carts/${itemId}`);
+};
+
+export const topUp = async (amount: number) => {
+    return request.post<TopUpResponse>('/users/edit/topup', { amount });
 };

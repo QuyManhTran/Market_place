@@ -6,6 +6,7 @@ export interface IUserStore {
     setUser: (data: IUserState) => void;
     setAvatar: (data: string) => void;
     setProfile: (data: string) => void;
+    topUp: (balance: number) => void;
 }
 const initialState: IUserState = {
     user: {
@@ -66,4 +67,13 @@ export const userStore = create<IUserStore>((set) => ({
                 user: { ...state.user.user, username: data },
             },
         })),
+    topUp(balance: number) {
+        set((state) => ({
+            ...state,
+            user: {
+                ...state.user,
+                user: { ...state.user.user, balance },
+            },
+        }));
+    },
 }));

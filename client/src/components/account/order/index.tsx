@@ -31,7 +31,7 @@ const columns: TableColumnsType<DataType> = [
         title: 'Amount',
         dataIndex: 'amount',
         key: 'amount',
-        render(value, record, index) {
+        render(value) {
             return `$ ${value}`;
         },
     },
@@ -39,8 +39,7 @@ const columns: TableColumnsType<DataType> = [
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        render(value, record, index) {
-            console.log('PaymentStatus', value);
+        render(value) {
             return (
                 <Tag color={value === PaymentStatus.SUCCESS ? 'green' : 'red'}>
                     {value === PaymentStatus.SUCCESS ? 'Success' : 'Failed'}
@@ -62,7 +61,7 @@ const columns: TableColumnsType<DataType> = [
         key: 'detail',
 
         render(value, record, index) {
-            return <Link to={`/order/${record.id}`}>View detail</Link>;
+            return <Link to={`/account/order/${record.id}`}>View detail</Link>;
         },
     },
 ];
@@ -99,6 +98,7 @@ const Order = () => {
     useEffect(() => {
         if (!user.user.id) setLoading(true);
         if (user.user.id) fetchOrders();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     return (

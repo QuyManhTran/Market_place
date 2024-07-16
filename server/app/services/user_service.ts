@@ -96,7 +96,9 @@ export default class UserService {
         await user.merge({ balance: user.balance + amount }).save()
         return {
             result: true,
-            user,
+            data: {
+                balance: user.balance,
+            },
         }
     }
 }

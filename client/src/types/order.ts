@@ -1,7 +1,12 @@
+import { IBaseItem } from './cart';
 import { IProduct } from './product';
 
 export interface IResponseOrder {
     order: IOrder;
+}
+
+export interface IResponseOrderDetail {
+    order: IOrderDetail;
 }
 
 export interface IResponseOrders {
@@ -16,11 +21,12 @@ export interface IOrder {
     updatedAt: string;
     payment: IPayment;
 }
-export interface IOrderItem {
-    id: number;
+
+export interface IOrderDetail extends IOrder {
+    items: IOrderItem[];
+}
+export interface IOrderItem extends IBaseItem {
     orderId: number;
-    productId: number;
-    product: IProduct;
 }
 
 export interface IPayment {

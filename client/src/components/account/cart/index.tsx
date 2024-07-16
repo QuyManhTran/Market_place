@@ -1,5 +1,5 @@
 import { cartStore } from '@/zustand/my-cart';
-import { Button, Flex, message, Typography } from 'antd';
+import { Button, Empty, Flex, message, Typography } from 'antd';
 import { useCallback, useState } from 'react';
 import CartItem from './cart-item';
 import { createOrder } from '@/services/order';
@@ -79,6 +79,9 @@ const Cart = () => {
                 {cart.items.map((item, index) => (
                     <CartItem key={index} cartId={cart.id} item={item} removeItem={onRemoveItem} />
                 ))}
+                {cart.items.length === 0 && (
+                    <Empty description="No items in cart" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                )}
             </Flex>
         </Flex>
     );

@@ -31,7 +31,8 @@ function getItem(
 const items: MenuItem[] = [
     getItem('My account', 'my account', <UserOutlined />, [
         getItem('Profile', 'profile'),
-        getItem('Privacy', 'privacy'),
+        getItem('Change password', 'privacy'),
+        getItem('My wallet', 'wallet'),
     ]),
     getItem('My cart', 'cart', <ShoppingCartOutlined />),
     getItem('My order', 'order', <OrderedListOutlined />),

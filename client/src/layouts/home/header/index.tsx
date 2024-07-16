@@ -1,16 +1,22 @@
 import { Colors } from '@/constants/color';
-import { Avatar, Button, Flex, Image, List, Typography } from 'antd';
+import { Avatar, Button, Dropdown, Flex, Image, List, MenuProps, message, Typography } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { Input } from 'antd';
 import logo from '@/assets/images/logo.png';
 import { Link } from 'react-router-dom';
-import { SearchOutlined } from '@ant-design/icons';
+import {
+    LogoutOutlined,
+    SearchOutlined,
+    ShoppingCartOutlined,
+    UserOutlined,
+} from '@ant-design/icons';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { IProduct } from '@/types/product';
 import { searchProduct } from '@/services/product';
 import { useStore } from 'zustand';
 import { userStore } from '@/zustand/user';
+import { logout } from '@/services/auth';
 
 const { Search } = Input;
 
@@ -30,6 +36,40 @@ const headerStyle: React.CSSProperties = {
     right: 0,
     zIndex: 100,
 };
+
+const items: MenuProps['items'] = [
+    {
+        key: 'profile',
+        label: (
+            <Link
+                to={{
+                    pathname: '/account/profile',
+                }}
+            >
+                My profile
+            </Link>
+        ),
+        icon: <UserOutlined />,
+    },
+    {
+        key: 'cart',
+        label: (
+            <Link
+                to={{
+                    pathname: '/account/cart',
+                }}
+            >
+                My cart
+            </Link>
+        ),
+        icon: <ShoppingCartOutlined />,
+    },
+    {
+        key: 'logout',
+        label: 'Logout',
+        icon: <LogoutOutlined />,
+    },
+];
 
 const HomeHeader = () => {
     const { user } = userStore();
@@ -62,6 +102,20 @@ const HomeHeader = () => {
         debouncedChangeHandler(event.target.value);
     };
 
+    const onLogout: MenuProps['onClick'] = async ({ key }) => {
+        if (key === 'logout') {
+            try {
+                const reponse = await logout();
+                if (reponse.data.result) {
+                    message.success('Logout successfully');
+                    window.location.reload();
+                }
+            } catch (error) {
+                message.error('Logout failed');
+            }
+        }
+    };
+
     useEffect(() => {
         if (!keyword) return setProducts([]);
         fetchProducts();
@@ -75,13 +129,15 @@ const HomeHeader = () => {
                 style={{
                     objectFit: 'cover',
                     height: 100,
+                    flex: 'none',
                 }}
             />
             <Flex
                 align="center"
                 style={{
                     position: 'relative',
-                    minWidth: 700,
+                    flex: 1,
+                    maxWidth: 700,
                 }}
             >
                 <Search
@@ -131,7 +187,7 @@ const HomeHeader = () => {
                     </div>
                 )}
             </Flex>
-            <Flex justify="flex-start" gap={8} align="center">
+            <Flex justify="flex-start" gap={8} align="center" style={{ flex: 'none' }}>
                 {!user.user.username && (
                     <>
                         <Link
@@ -156,25 +212,30 @@ const HomeHeader = () => {
                 )}
                 {user.user.username && (
                     <>
-                        <Link
-                            to={{
-                                pathname: '/account/profile',
+                        <Dropdown
+                            menu={{
+                                items: items,
+                                onClick: onLogout,
                             }}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 8,
-                            }}
+                            arrow
                         >
-                            <Avatar
-                                size={40}
-                                src={user.user.profile.avatar.url}
-                                style={{ cursor: 'pointer' }}
-                            />
-                            <Typography.Text style={{ cursor: 'pointer', fontWeight: 600 }}>
-                                {user.user.username}
-                            </Typography.Text>
-                        </Link>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 8,
+                                }}
+                            >
+                                <Avatar
+                                    size={40}
+                                    src={user.user.profile.avatar.url}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                                <Typography.Text style={{ cursor: 'pointer', fontWeight: 600 }}>
+                                    {user.user.username}
+                                </Typography.Text>
+                            </div>
+                        </Dropdown>
                         <Link
                             to={{
                                 pathname: '/account/profile',

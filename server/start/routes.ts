@@ -51,7 +51,7 @@ router
                     .group(() => {
                         router.patch('/profile', [UsersController, 'updateProfile'])
                         router.patch('/image', [UsersController, 'updateImage'])
-                        router.patch('/topup', [UsersController, 'topUp'])
+                        router.post('/topup', [UsersController, 'topUp'])
                     })
                     .prefix('/edit')
                 router.get('/search', [UsersController, 'search']).use(middleware.pagination())
@@ -105,8 +105,8 @@ router
             .use(
                 ['index'],
                 [
-                    middleware.auth({ guards: ['api'] }),
-                    middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
+                    // middleware.auth({ guards: ['api'] }),
+                    // middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
                     middleware.pagination(),
                 ]
             )

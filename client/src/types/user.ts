@@ -44,3 +44,7 @@ export interface IAcessToken {
 export interface IUpdateProfile {
     username?: string;
 }
+
+export interface ITopUp {
+    balance: number;
+}

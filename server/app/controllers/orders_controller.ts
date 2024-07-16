@@ -34,8 +34,10 @@ export default class OrdersController {
     /**
      * Show individual record
      */
-    async show({ params }: HttpContext) {
-        return this.orderService.show(params.id)
+    async show({ params, auth }: HttpContext) {
+        return this.redisService.get(`${auth?.user?.id}/orders/${params.id}`, () =>
+            this.orderService.show(params.id)
+        )
     }
 
     /**

@@ -41,15 +41,12 @@ const HomeContent = () => {
         }
     };
 
-    useEffect(() => {
-        if (!user.accessToken.token) setLoading(true);
-        if (user.accessToken.token) {
-            fetchProducts();
-        }
-    }, [user]);
+    // useEffect(() => {
+    //     fetchProducts();
+    // }, []);
 
     useEffect(() => {
-        if (cur && user.accessToken.token) fetchProducts();
+        if (cur) fetchProducts();
     }, [cur]);
 
     return (
