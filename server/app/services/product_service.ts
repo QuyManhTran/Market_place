@@ -75,17 +75,23 @@ export default class ProductService {
         }
     }
 
-    async index({ curPage, perPage }: Pagination, keyword: string) {
+    async index(
+        { curPage, perPage }: Pagination,
+        keyword: string,
+        storeId: number | undefined = undefined
+    ) {
         const products = await Product.query()
             .where((query) => {
-                keyword
-                    ? query
-                          .where((inQuery) => {
-                              inQuery
-                                  .where('name', 'like', `%${keyword}%`)
-                                  .orWhere('description', 'like', `%${keyword}%`)
-                          })
-                          .andWhere('status', ProductStatus.ACTIVE)
+                keyword &&
+                    query.where((inQuery) => {
+                        inQuery
+                            .where('name', 'like', `%${keyword}%`)
+                            .orWhere('description', 'like', `%${keyword}%`)
+                    })
+            })
+            .where((query) => {
+                storeId
+                    ? query.where('storeId', storeId)
                     : query.where('status', ProductStatus.ACTIVE)
             })
             .preload('image')
@@ -125,5 +131,9 @@ export default class ProductService {
                 product,
             },
         }
+    }
+
+    async create(storeId: number, pagination: Pagination) {
+        return this.index(pagination, '', storeId)
     }
 }

@@ -6,6 +6,7 @@ const request = axios.create({
         `${process.env.REACT_APP_HOST}/api/${process.env.REACT_APP_API_VERSION}` ||
         'http://localhost:3333/api/v1',
     withCredentials: true,
+    timeout: 10 * 1000,
 });
 
 request.interceptors.request.use(function (config) {

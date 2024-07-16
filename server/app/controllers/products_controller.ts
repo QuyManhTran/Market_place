@@ -28,7 +28,14 @@ export default class ProductsController {
     /**
      * Display form to create a new record
      */
-    async create({}: HttpContext) {}
+    async create({ params, pagination }: HttpContext) {
+        return this.redisService.get(
+            `stores/${params.store_id}/products/create?per_page=${pagination.perPage}&cur_page=${pagination.curPage}`,
+            () => {
+                return this.productService.create(params.store_id, pagination)
+            }
+        )
+    }
 
     /**
      * Handle form submission for the create action

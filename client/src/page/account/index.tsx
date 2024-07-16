@@ -1,44 +1,12 @@
 import React, { useState } from 'react';
-import {
-    FileOutlined,
-    OrderedListOutlined,
-    ShoppingCartOutlined,
-    TeamOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
 import { Breadcrumb, Image, Layout, Menu, theme } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import logo from '@/assets/images/logo.png';
-const { Header, Content, Footer, Sider } = Layout;
-
-type MenuItem = Required<MenuProps>['items'][number];
-
-function getItem(
-    label: React.ReactNode,
-    key: React.Key,
-    icon?: React.ReactNode,
-    children?: MenuItem[],
-): MenuItem {
-    return {
-        key,
-        icon,
-        children,
-        label,
-    } as MenuItem;
-}
-
-const items: MenuItem[] = [
-    getItem('My account', 'my account', <UserOutlined />, [
-        getItem('Profile', 'profile'),
-        getItem('Change password', 'privacy'),
-        getItem('My wallet', 'wallet'),
-    ]),
-    getItem('My cart', 'cart', <ShoppingCartOutlined />),
-    getItem('My order', 'order', <OrderedListOutlined />),
-];
+import { menuStore } from '@/zustand/my-dashboard';
+const { Header, Content, Sider } = Layout;
 
 const AccountPage: React.FC = () => {
+    const { items } = menuStore();
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer, borderRadiusLG },

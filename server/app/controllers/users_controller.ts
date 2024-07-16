@@ -60,4 +60,8 @@ export default class UsersController {
         const data = await topUpValidator.validate(rawData)
         return this.userService.topUp(data.amount, auth.user as User)
     }
+
+    async getMyStore({ auth }: HttpContext) {
+        return this.userService.getMyStore(auth.user as User)
+    }
 }

@@ -6,9 +6,12 @@ import { useEffect } from 'react';
 import { refresh } from './services/auth';
 import { cartStore } from './zustand/my-cart';
 import { getCart } from './services/user';
+import { menuStore } from './zustand/my-dashboard';
+import { UserRoles } from './enums/user';
 const App = () => {
     const { user, setUser } = userStore();
     const { setCart } = cartStore();
+    const { addStore } = menuStore();
     const refreshToken = async () => {
         try {
             const response = await refresh();
@@ -33,7 +36,10 @@ const App = () => {
 
     useEffect(() => {
         if (!user.accessToken.token) refreshToken();
-        else refreshCart(user.user.id);
+        else {
+            refreshCart(user.user.id);
+            if ((user.user.role = UserRoles.SELLER)) addStore();
+        }
     }, [user]);
 
     return (

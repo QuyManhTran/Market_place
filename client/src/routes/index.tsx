@@ -3,6 +3,7 @@ import Order from '@/components/account/order';
 import OrderDetail from '@/components/account/order/order-detail';
 import Privacy from '@/components/account/privacy';
 import Profile from '@/components/account/profile';
+import Store from '@/components/account/store';
 import Wallet from '@/components/account/wallet';
 import Login from '@/components/auths/login';
 import Register from '@/components/auths/register';
@@ -58,6 +59,10 @@ const AppRouter = () => {
                 {
                     path: 'order/:id',
                     element: <OrderDetail />,
+                },
+                {
+                    path: 'store',
+                    element: <Store />,
                 },
             ],
         },

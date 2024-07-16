@@ -7,6 +7,7 @@ import CloudinaryService from './cloudinary_service.js'
 import { ProfileUser } from '#types/user'
 import User from '#models/user'
 import { Pagination, PaginationMeta } from '#types/pagination'
+import Product from '#models/product'
 @inject()
 export default class UserService {
     constructor(protected cloudinaryService: CloudinaryService) {}
@@ -98,6 +99,23 @@ export default class UserService {
             result: true,
             data: {
                 balance: user.balance,
+            },
+        }
+    }
+
+    async getMyStore(user: User) {
+        const store = await user.related('store').query().first()
+        if (!store) {
+            return {
+                result: false,
+                message: 'You do not have a store',
+            }
+        }
+
+        return {
+            result: true,
+            data: {
+                store: store?.serialize(),
             },
         }
     }

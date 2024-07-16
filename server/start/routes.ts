@@ -55,6 +55,7 @@ router
                     })
                     .prefix('/edit')
                 router.get('/search', [UsersController, 'search']).use(middleware.pagination())
+                router.get('/my-store', [UsersController, 'getMyStore'])
             })
             .prefix('/users')
             .use([
@@ -102,19 +103,20 @@ router
                     middleware.role({ roles: [UserRoles.SELLER] }),
                 ]
             )
-            .use(
-                ['index'],
-                [
-                    // middleware.auth({ guards: ['api'] }),
-                    // middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
-                    middleware.pagination(),
-                ]
-            )
+            .use(['index'], [middleware.pagination()])
             .use(
                 ['show'],
                 [
                     middleware.auth({ guards: ['api'] }),
                     middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
+                ]
+            )
+            .use(
+                ['create'],
+                [
+                    middleware.auth({ guards: ['api'] }),
+                    middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
+                    middleware.pagination(),
                 ]
             )
 
