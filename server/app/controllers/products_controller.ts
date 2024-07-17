@@ -104,6 +104,7 @@ export default class ProductsController {
                         part,
                         'products'
                     )
+                    console.log(uploadResponse)
                     cloudinaryResponse = uploadResponse
                 }
             }

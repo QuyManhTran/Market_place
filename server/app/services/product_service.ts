@@ -55,14 +55,14 @@ export default class ProductService {
                     url: cloudinaryResponse.secure_url,
                 })
             } else {
-                console.log('exits')
+                const oldPublicId = image.publicId
                 await image
                     ?.merge({
                         publicId: cloudinaryResponse.public_id,
                         url: cloudinaryResponse.secure_url,
                     })
                     ?.save()
-                const result = await this.cloudinaryService.deleteImage(image.publicId)
+                const result = await this.cloudinaryService.deleteImage(oldPublicId)
                 console.log(result)
             }
         }
@@ -94,6 +94,7 @@ export default class ProductService {
                     ? query.where('storeId', storeId)
                     : query.where('status', ProductStatus.ACTIVE)
             })
+            .orderBy('updatedAt', 'desc')
             .preload('image')
             .paginate(curPage, perPage)
         const meta: PaginationMeta = {

@@ -1,7 +1,7 @@
 import { ProductStatus } from '@/enums/product';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Flex, Image, TableProps, Tag } from 'antd';
-
+import dateformat from 'dateformat';
 export interface IProductStoreColumn {
     key: React.Key;
     image: string;
@@ -9,6 +9,7 @@ export interface IProductStoreColumn {
     description: string;
     price: number;
     status: string;
+    date: string;
     edit: string;
 }
 
@@ -48,15 +49,15 @@ const storeColumns = ({
             title: 'Description',
             dataIndex: 'description',
             key: 'description',
-            width: 400,
+            width: 300,
             rowSpan: 2,
+            // ellipsis: true,
         },
         {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
             sortDirections: ['descend', 'ascend'],
-            defaultSortOrder: 'ascend',
             sorter: (a, b) => a.price - b.price,
         },
         {
@@ -98,6 +99,16 @@ const storeColumns = ({
                 },
             ],
             onFilter: (value, record) => record.status === value,
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+            sortDirections: ['descend', 'ascend'],
+            sorter: (a, b) => a.date.localeCompare(b.date),
+            render(value, record, index) {
+                return dateformat(value, 'HH:MM:ss, dd/mm/yyyy');
+            },
         },
         {
             title: 'Edit',

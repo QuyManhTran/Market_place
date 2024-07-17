@@ -36,3 +36,15 @@ export interface IPagination {
 export interface IUpdateAvatar {
     avatar: string;
 }
+
+export interface IUpdateProduct {
+    name: string;
+    description: string;
+    price: number;
+    status: string;
+    image?: any;
+}
+
+export interface ICreateProduct extends IUpdateProduct {
+    image: any;
+}

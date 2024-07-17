@@ -6,7 +6,7 @@ import { menuStore } from '@/zustand/my-dashboard';
 const { Header, Content, Sider } = Layout;
 
 const AccountPage: React.FC = () => {
-    const { items } = menuStore();
+    const { items, selectedKeys, setSelectedKeys } = menuStore();
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -19,13 +19,15 @@ const AccountPage: React.FC = () => {
                 <div className="demo-logo-vertical" />
                 <Menu
                     theme="dark"
-                    defaultSelectedKeys={['profile']}
+                    // defaultSelectedKeys={selectedKeys}
                     mode="inline"
                     items={items}
                     onSelect={({ selectedKeys }) => {
                         navigate(`/account/${selectedKeys}`);
+                        setSelectedKeys(selectedKeys);
                     }}
                     defaultOpenKeys={['my account']}
+                    selectedKeys={selectedKeys}
                 />
             </Sider>
             <Layout style={{ maxHeight: '100vh', overflowY: 'hidden' }}>

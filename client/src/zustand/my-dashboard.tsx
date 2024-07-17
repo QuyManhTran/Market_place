@@ -24,7 +24,9 @@ function getItem(
 }
 export interface IMenuStore {
     items: MenuItem[];
+    selectedKeys: string[];
     addStore: () => void;
+    setSelectedKeys: (keys: string[]) => void;
 }
 export const menuStore = create<IMenuStore>((set) => ({
     items: [
@@ -36,10 +38,14 @@ export const menuStore = create<IMenuStore>((set) => ({
         getItem('My cart', 'cart', <ShoppingCartOutlined />),
         getItem('My order', 'order', <OrderedListOutlined />),
     ],
+    selectedKeys: ['profile'],
     addStore() {
         set((state) => ({
             ...state,
             items: [...state.items, getItem('My store', 'store', <ShopOutlined />)],
         }));
+    },
+    setSelectedKeys(keys) {
+        set({ selectedKeys: keys });
     },
 }));
