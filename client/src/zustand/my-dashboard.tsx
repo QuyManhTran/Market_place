@@ -27,17 +27,20 @@ export interface IMenuStore {
     selectedKeys: string[];
     addStore: () => void;
     setSelectedKeys: (keys: string[]) => void;
+    refresh: () => void;
 }
+
+const initialValues: MenuItem[] = [
+    getItem('My account', 'my account', <UserOutlined />, [
+        getItem('Profile', 'profile'),
+        getItem('Change password', 'privacy'),
+        getItem('My wallet', 'wallet'),
+    ]),
+    getItem('My cart', 'cart', <ShoppingCartOutlined />),
+    getItem('My order', 'order', <OrderedListOutlined />),
+];
 export const menuStore = create<IMenuStore>((set) => ({
-    items: [
-        getItem('My account', 'my account', <UserOutlined />, [
-            getItem('Profile', 'profile'),
-            getItem('Change password', 'privacy'),
-            getItem('My wallet', 'wallet'),
-        ]),
-        getItem('My cart', 'cart', <ShoppingCartOutlined />),
-        getItem('My order', 'order', <OrderedListOutlined />),
-    ],
+    items: initialValues,
     selectedKeys: ['profile'],
     addStore() {
         set((state) => ({
@@ -47,5 +50,8 @@ export const menuStore = create<IMenuStore>((set) => ({
     },
     setSelectedKeys(keys) {
         set({ selectedKeys: keys });
+    },
+    refresh() {
+        set({ items: initialValues });
     },
 }));

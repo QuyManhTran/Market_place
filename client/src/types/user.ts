@@ -55,3 +55,8 @@ export interface IMyStore {
     storeName: string;
     description: string;
 }
+
+export interface ICreateStore {
+    storeName: string;
+    description: string;
+}

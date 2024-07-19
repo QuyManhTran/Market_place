@@ -23,7 +23,7 @@ import { IProductStoreColumn } from './column';
 import storeColumns from './column';
 import { PlusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { ProductStatus } from '@/enums/product';
-import { updateProduct } from '@/services/store';
+import { removeStoreProduct, updateProduct } from '@/services/store';
 import ProductForm from './new-product';
 import { useLocation } from 'react-router-dom';
 import { menuStore } from '@/zustand/my-dashboard';
@@ -39,8 +39,12 @@ const Store = () => {
     const [limit, setLimit] = useState<number>(5);
     const [cur, setCur] = useState<number>(1);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const [loadingEdit, setLoadingEdit] = useState<boolean>(false);
     const [isNewProductModal, setIsNewProductModal] = useState<boolean>(false);
     const [editProduct, setEditProduct] = useState<number>();
+    const [removeProduct, setRemoveProduct] = useState<number>();
+    const [isRemoveModal, setIsRemoveModal] = useState<boolean>(false);
+    const [loadingRemove, setLoadingRemove] = useState<boolean>(false);
     const [form] = Form.useForm();
 
     const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
@@ -92,6 +96,7 @@ const Store = () => {
 
     const onConfirm = async () => {
         try {
+            setLoadingEdit(true);
             const values: IUpdateProduct = await form.validateFields();
             const formData = new FormData();
             formData.append('name', values.name);
@@ -119,6 +124,8 @@ const Store = () => {
             setIsModalVisible(false);
         } catch (error) {
             message.error('Please fill all required fields !');
+        } finally {
+            setLoadingEdit(false);
         }
     };
 
@@ -153,6 +160,32 @@ const Store = () => {
             return e;
         }
         return e?.fileList;
+    };
+
+    const onOpenRemove = useCallback((id: number) => {
+        setRemoveProduct(id);
+        setIsRemoveModal(true);
+    }, []);
+
+    const onCancelRemove = () => {
+        setIsRemoveModal(false);
+    };
+
+    const onRemove = async () => {
+        try {
+            setLoadingRemove(true);
+            const response = await removeStoreProduct(store?.id as number, removeProduct as number);
+            if (response.data.result) {
+                setData((prev) => prev.filter((item) => item.id !== removeProduct));
+                setTotal((prev) => prev - 1);
+                message.success('Remove successfully !');
+            }
+            setIsRemoveModal(false);
+        } catch (error) {
+            message.error('Something went wrong !');
+        } finally {
+            setLoadingRemove(false);
+        }
     };
 
     useEffect(() => {
@@ -210,6 +243,7 @@ const Store = () => {
                             }}
                             columns={storeColumns({
                                 openEdit: onOpen,
+                                openRemove: onOpenRemove,
                             })}
                             dataSource={filterData}
                             pagination={{
@@ -235,12 +269,13 @@ const Store = () => {
                 onCancel={onCancel}
                 onOk={onConfirm}
                 destroyOnClose
+                confirmLoading={loadingEdit}
             >
                 {editProduct && filterProduct && (
                     <Form
                         clearOnDestroy
                         form={form}
-                        labelCol={{ span: 4 }}
+                        labelCol={{ span: 6 }}
                         wrapperCol={{ span: 14 }}
                         layout="horizontal"
                         style={{ maxWidth: 600 }}
@@ -323,6 +358,25 @@ const Store = () => {
                         </Form.Item>
                     </Form>
                 )}
+            </Modal>
+            <Modal
+                open={isRemoveModal}
+                okText="Remove"
+                cancelText="Cancel"
+                onCancel={onCancelRemove}
+                confirmLoading={loadingRemove}
+                onOk={onRemove}
+            >
+                <Typography.Title
+                    type="danger"
+                    style={{
+                        textAlign: 'center',
+                        padding: '24px 0',
+                    }}
+                    level={4}
+                >
+                    Are you sure to remove this product ?
+                </Typography.Title>
             </Modal>
             {store && (
                 <ProductForm

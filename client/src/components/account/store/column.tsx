@@ -15,10 +15,12 @@ export interface IProductStoreColumn {
 
 export interface IProductStoreProps {
     openEdit: (id: number) => void;
+    openRemove: (id: number) => void;
 }
 
 const storeColumns = ({
     openEdit,
+    openRemove,
 }: IProductStoreProps): TableProps<IProductStoreColumn>['columns'] => {
     const columns: TableProps<IProductStoreColumn>['columns'] = [
         {
@@ -136,7 +138,14 @@ const storeColumns = ({
                                 Edit
                             </Button>
                         </ConfigProvider>
-                        <Button key={index} icon={<DeleteOutlined />} danger type="primary">
+                        <Button
+                            key={index}
+                            icon={<DeleteOutlined />}
+                            danger
+                            type="primary"
+                            onClick={() => openRemove(record.key as number)}
+                            disabled={record.status === ProductStatus.SOLD}
+                        >
                             Remove
                         </Button>
                     </Flex>

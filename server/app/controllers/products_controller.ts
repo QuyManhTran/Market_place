@@ -20,7 +20,7 @@ export default class ProductsController {
     async index({ pagination, request }: HttpContext) {
         const keyword = request.input('keyword', '')
         return this.redisService.get(
-            `products?per_page=${pagination.perPage}&cur_page=${pagination.curPage}`,
+            `products?per_page=${pagination.perPage}&cur_page=${pagination.curPage}${keyword ? `&keyword=${keyword}` : ''}`,
             () => this.productService.index(pagination, keyword)
         )
     }
@@ -125,5 +125,7 @@ export default class ProductsController {
     /**
      * Delete record
      */
-    // async destroy({ params }: HttpContext) {}
+    async destroy({ params, auth }: HttpContext) {
+        return this.productService.destroy(auth.user as User, params.store_id, params.id)
+    }
 }

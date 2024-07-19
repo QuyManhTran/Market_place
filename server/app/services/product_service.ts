@@ -8,6 +8,7 @@ import CloudinaryService from './cloudinary_service.js'
 import { Pagination, PaginationMeta } from '#types/pagination'
 import { Exception } from '@adonisjs/core/exceptions'
 import { ProductStatus } from '#enums/product'
+import User from '#models/user'
 @inject()
 export default class ProductService {
     constructor(protected cloudinaryService: CloudinaryService) {}
@@ -94,6 +95,7 @@ export default class ProductService {
                     ? query.where('storeId', storeId)
                     : query.where('status', ProductStatus.ACTIVE)
             })
+            .where('isDeleted', false)
             .orderBy('updatedAt', 'desc')
             .preload('image')
             .paginate(curPage, perPage)
@@ -136,5 +138,21 @@ export default class ProductService {
 
     async create(storeId: number, pagination: Pagination) {
         return this.index(pagination, '', storeId)
+    }
+
+    async destroy(user: User, storeId: number, productId: number) {
+        const store = await user.related('store').query().where('id', storeId).first()
+        if (!store) {
+            throw new Exception('Store not found', {
+                code: 'E_NOT_FOUND',
+                status: 404,
+            })
+        }
+        const product = await Product.findByOrFail({ id: productId, storeId: store.id })
+        await product.merge({ isDeleted: true }).save()
+        return {
+            result: true,
+            message: 'Product has been deleted',
+        }
     }
 }

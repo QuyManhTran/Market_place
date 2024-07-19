@@ -38,7 +38,7 @@ const App = () => {
         if (!user.accessToken.token) refreshToken();
         else {
             refreshCart(user.user.id);
-            if ((user.user.role = UserRoles.SELLER)) addStore();
+            if (user.user.role === UserRoles.SELLER) addStore();
         }
     }, [user]);
 

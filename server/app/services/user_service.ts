@@ -7,7 +7,6 @@ import CloudinaryService from './cloudinary_service.js'
 import { ProfileUser } from '#types/user'
 import User from '#models/user'
 import { Pagination, PaginationMeta } from '#types/pagination'
-import Product from '#models/product'
 @inject()
 export default class UserService {
     constructor(protected cloudinaryService: CloudinaryService) {}

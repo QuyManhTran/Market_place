@@ -112,10 +112,10 @@ router
                 ]
             )
             .use(
-                ['create'],
+                ['create', 'destroy'],
                 [
                     middleware.auth({ guards: ['api'] }),
-                    middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
+                    middleware.role({ roles: [UserRoles.SELLER] }),
                     middleware.pagination(),
                 ]
             )

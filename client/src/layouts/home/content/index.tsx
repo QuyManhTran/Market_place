@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 const contentStyle: React.CSSProperties = {
     minHeight: 120,
-    padding: '120px 0px',
+    paddingBottom: 120,
 };
 
 const HomeContent = () => {

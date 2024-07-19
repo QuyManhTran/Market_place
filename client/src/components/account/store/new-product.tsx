@@ -3,7 +3,7 @@ import { createProduct } from '@/services/store';
 import { ICreateProduct, IProduct } from '@/types/product';
 import { PlusOutlined } from '@ant-design/icons';
 import { Form, Input, InputNumber, message, Modal, Select, Upload } from 'antd';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 export interface ProductFormProps {
     isModalVisible: boolean;
     storeId: number;
@@ -12,6 +12,7 @@ export interface ProductFormProps {
 }
 const ProductForm: FC<ProductFormProps> = ({ isModalVisible, onCancel, storeId, onCreate }) => {
     const [form] = Form.useForm();
+    const [loading, setLoading] = useState<boolean>(false);
     const normFile = (e: any) => {
         if (Array.isArray(e)) {
             return e;
@@ -21,6 +22,7 @@ const ProductForm: FC<ProductFormProps> = ({ isModalVisible, onCancel, storeId, 
 
     const onConfirm = async () => {
         try {
+            setLoading(true);
             const values: ICreateProduct = await form.validateFields();
             const formData = new FormData();
             formData.append('name', values.name);
@@ -37,6 +39,8 @@ const ProductForm: FC<ProductFormProps> = ({ isModalVisible, onCancel, storeId, 
             }
         } catch (error) {
             message.error('Please fill all required fields !');
+        } finally {
+            setLoading(false);
         }
     };
     return (
@@ -47,6 +51,7 @@ const ProductForm: FC<ProductFormProps> = ({ isModalVisible, onCancel, storeId, 
             title="New product"
             onCancel={onCancel}
             onOk={onConfirm}
+            confirmLoading={loading}
         >
             <Form
                 form={form}

@@ -5,7 +5,7 @@ import { userStore } from '@/zustand/user';
 import { Flex, Spin, Table, TableColumnsType, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import dateFormat from 'dateformat';
 export interface DataType {
     key: React.Key;
     id: number;
@@ -52,8 +52,11 @@ const columns: TableColumnsType<DataType> = [
         dataIndex: 'date',
         key: 'date',
         render(value, record, index) {
-            return new Date(value).toLocaleString();
+            return dateFormat(value, 'HH:MM:ss dd/mm/yyyy');
         },
+        sortDirections: ['descend', 'ascend'],
+        defaultSortOrder: 'descend',
+        sorter: (a, b) => a.date.localeCompare(b.date),
     },
     {
         title: 'Detail',
