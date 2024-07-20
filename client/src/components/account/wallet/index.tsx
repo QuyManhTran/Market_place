@@ -1,7 +1,8 @@
 import { topUp } from '@/services/user';
 import { userStore } from '@/zustand/user';
 import { DollarOutlined } from '@ant-design/icons';
-import { Button, Flex, InputNumber, message, Modal, Typography } from 'antd';
+import { Button, Flex, Form, InputNumber, message, Modal, Typography } from 'antd';
+import FormItem from 'antd/es/form/FormItem';
 import { useEffect, useState } from 'react';
 
 const Wallet = () => {
@@ -70,21 +71,31 @@ const Wallet = () => {
                 onCancel={handleCancel}
                 okText="Top up"
                 cancelText="Cancel"
-                okButtonProps={{ disabled: deposit === 0 }}
+                okButtonProps={{ disabled: deposit < 1000 }}
             >
-                <InputNumber<number>
-                    placeholder="Exp: 10000"
-                    min={0}
-                    max={99999999}
-                    controls
-                    size="large"
-                    style={{ width: '100%', margin: '24px 0px' }}
-                    onChange={(value) => {
-                        if (value !== null) setDeposit(value);
-                    }}
-                    variant="outlined"
-                    step={1000}
-                />
+                <Form>
+                    <FormItem
+                        name="deposite"
+                        rules={[
+                            { required: true, message: 'Please input your amount!' },
+                            { type: 'number', min: 1000, message: 'Amount at least 1000$' },
+                        ]}
+                    >
+                        <InputNumber<number>
+                            placeholder="Exp: 10000"
+                            min={0}
+                            max={99999999}
+                            controls
+                            size="large"
+                            style={{ width: '100%', margin: '24px 0px' }}
+                            onChange={(value) => {
+                                if (value !== null) setDeposit(value);
+                            }}
+                            variant="outlined"
+                            step={1000}
+                        />
+                    </FormItem>
+                </Form>
             </Modal>
         </>
     );

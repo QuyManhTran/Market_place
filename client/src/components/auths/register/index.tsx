@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { FormProps } from 'antd';
-import { Button, Form, Input, Typography } from 'antd';
+import { Button, Form, Input, message, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { login, register } from '@/services/auth';
 
@@ -19,8 +19,10 @@ const Register: React.FC = () => {
             setLoading(true);
             const response = await register({ ...values });
             console.log(response.data);
+            message.success('Register successfully !');
         } catch (error) {
             console.log(error);
+            message.error('Register failed !');
         } finally {
             setLoading(false);
         }
@@ -80,7 +82,7 @@ const Register: React.FC = () => {
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" htmlType="submit" size="large">
+                    <Button type="primary" htmlType="submit" size="large" loading={loading}>
                         Submit
                     </Button>
                 </Form.Item>
@@ -95,7 +97,7 @@ const Register: React.FC = () => {
                     marginTop: 120,
                 }}
             >
-                <Button type="link" size="small" loading={loading}>
+                <Button type="link" size="small">
                     Already have an account? Login
                 </Button>
             </Link>

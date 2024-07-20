@@ -28,12 +28,10 @@ import { debounce } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { IProduct } from '@/types/product';
 import { searchProduct } from '@/services/product';
-import { useStore } from 'zustand';
 import { userStore } from '@/zustand/user';
 import { logout } from '@/services/auth';
 import { menuStore } from '@/zustand/my-dashboard';
 import { UserRoles } from '@/enums/user';
-import { ItemType } from 'antd/es/menu/interface';
 import { useForm } from 'antd/es/form/Form';
 import { ICreateStore } from '@/types/user';
 import { CreateStore } from '@/services/store';
@@ -98,6 +96,7 @@ const HomeHeader = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
     const [items, setItems] = useState<MenuProps['items']>(initialItems);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isOpenSearch, setIsOpenSearch] = useState(false);
     const [loadingForm, setLoadingForm] = useState(false);
     const [form] = useForm();
 
@@ -133,6 +132,7 @@ const HomeHeader = () => {
                     response.data.data.products.data,
                 );
                 setProducts(response.data.data.products.data);
+                setIsOpenSearch(true);
             }
         } catch (error) {
             console.log('fetchProducts -> error', error);
@@ -203,15 +203,21 @@ const HomeHeader = () => {
     return (
         <>
             <Header style={headerStyle}>
-                <Image
-                    preview={false}
-                    src={logo}
-                    style={{
-                        objectFit: 'cover',
-                        height: 100,
-                        flex: 'none',
+                <Link
+                    to={{
+                        pathname: '/',
                     }}
-                />
+                >
+                    <Image
+                        preview={false}
+                        src={logo}
+                        style={{
+                            objectFit: 'cover',
+                            height: 100,
+                            flex: 'none',
+                        }}
+                    />
+                </Link>
                 <Flex
                     align="center"
                     style={{
@@ -221,6 +227,11 @@ const HomeHeader = () => {
                     }}
                 >
                     <Search
+                        onSearch={(value, e, info) => {
+                            if (info?.source === 'clear') {
+                                setIsOpenSearch(false);
+                            }
+                        }}
                         placeholder="Search something..."
                         enterButton={
                             <Button type="primary" icon={<SearchOutlined />}>
@@ -234,8 +245,14 @@ const HomeHeader = () => {
                         }}
                         type="primary"
                         onChange={(e) => handleChange(e)}
+                        onFocus={() => setIsOpenSearch(true)}
+                        onBlur={() => {
+                            setTimeout(() => {
+                                setIsOpenSearch(false);
+                            }, 200);
+                        }}
                     />
-                    {products.length > 0 && (
+                    {isOpenSearch && (
                         <div
                             style={{
                                 position: 'absolute',
@@ -255,13 +272,24 @@ const HomeHeader = () => {
                                 itemLayout="horizontal"
                                 dataSource={products}
                                 renderItem={(item, index) => (
-                                    <List.Item>
-                                        <List.Item.Meta
-                                            avatar={<Avatar src={item.image.url} />}
-                                            title={<a href="https://ant.design">{item.name}</a>}
-                                            description={item.description}
-                                        />
-                                    </List.Item>
+                                    <Link
+                                        to={{
+                                            pathname: `/product/${item.id}`,
+                                            search: `storeId=${item.storeId}`,
+                                        }}
+                                        onMouseEnter={(e) =>
+                                            (e.currentTarget.style.opacity = '0.6')
+                                        }
+                                        onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+                                    >
+                                        <List.Item>
+                                            <List.Item.Meta
+                                                avatar={<Avatar src={item.image.url} />}
+                                                title={<>{item.name}</>}
+                                                description={item.description}
+                                            />
+                                        </List.Item>
+                                    </Link>
                                 )}
                             />
                         </div>

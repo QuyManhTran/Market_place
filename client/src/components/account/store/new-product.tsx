@@ -63,14 +63,28 @@ const ProductForm: FC<ProductFormProps> = ({ isModalVisible, onCancel, storeId, 
                 <Form.Item
                     label="Name"
                     name="name"
-                    rules={[{ required: true, message: 'Name required!' }]}
+                    rules={[
+                        { required: true, message: 'Name required!' },
+                        {
+                            type: 'string',
+                            min: 4,
+                            message: 'Name must be at least 4 characters!',
+                        },
+                    ]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="Description"
                     name="description"
-                    rules={[{ required: true, message: 'Descripton required!' }]}
+                    rules={[
+                        { required: true, message: 'Descripton required!' },
+                        {
+                            type: 'string',
+                            min: 4,
+                            message: 'Description must be at least 4 characters!',
+                        },
+                    ]}
                 >
                     <Input />
                 </Form.Item>

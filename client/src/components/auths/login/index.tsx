@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { FormProps } from 'antd';
-import { Alert, Button, Form, Input, Typography } from 'antd';
+import { Alert, Button, Form, Input, message, Typography } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '@/services/auth';
 import { CheckCircleFilled } from '@ant-design/icons';
@@ -24,10 +24,12 @@ const Login: React.FC = () => {
             console.log(response.data);
             if (!response.data.result) throw new Error(response.data?.message);
             setUser(response.data.data as IUserState);
+            message.success('Login successfully !');
             setIsSuccess(true);
             navigate('/');
         } catch (error) {
             console.log(error);
+            message.error('Login failed !');
         } finally {
             setLoading(false);
         }
@@ -91,6 +93,7 @@ const Login: React.FC = () => {
                         style={{
                             marginLeft: 'auto',
                         }}
+                        loading={loading}
                     >
                         Submit
                     </Button>
@@ -106,7 +109,7 @@ const Login: React.FC = () => {
                     marginTop: 120,
                 }}
             >
-                <Button type="link" size="large" loading={loading}>
+                <Button type="link" size="large">
                     Don't have an account? Register here!
                 </Button>
             </Link>
