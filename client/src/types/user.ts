@@ -48,3 +48,15 @@ export interface IUpdateProfile {
 export interface ITopUp {
     balance: number;
 }
+
+export interface IMyStore {
+    id: number;
+    sellerId: number;
+    storeName: string;
+    description: string;
+}
+
+export interface ICreateStore {
+    storeName: string;
+    description: string;
+}

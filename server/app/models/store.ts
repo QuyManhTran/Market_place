@@ -23,7 +23,10 @@ export default class Store extends BaseModel {
     @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
     declare updatedAt: DateTime
 
-    @belongsTo(() => User)
+    @belongsTo(() => User, {
+        localKey: 'id',
+        foreignKey: 'sellerId',
+    })
     declare seller: BelongsTo<typeof User>
 
     @hasMany(() => Product, {

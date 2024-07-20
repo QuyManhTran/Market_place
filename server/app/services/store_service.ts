@@ -12,16 +12,14 @@ export default class StoreService {
                 role: UserRoles.SELLER,
             })
             .save()
-        const store = await user.related('store').create({
+        await user.related('store').create({
             description,
             storeName,
         })
 
         return {
             result: true,
-            data: {
-                store,
-            },
+            message: 'Store created successfully',
         }
     }
 

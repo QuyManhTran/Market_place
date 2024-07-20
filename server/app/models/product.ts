@@ -24,6 +24,9 @@ export default class Product extends BaseModel {
     @column()
     declare status: ProductStatus
 
+    @column({ columnName: 'is_deleted', serializeAs: null })
+    declare isDeleted: boolean
+
     @column.dateTime({ autoCreate: true })
     declare createdAt: DateTime
 

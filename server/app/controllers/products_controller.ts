@@ -20,7 +20,7 @@ export default class ProductsController {
     async index({ pagination, request }: HttpContext) {
         const keyword = request.input('keyword', '')
         return this.redisService.get(
-            `products?per_page=${pagination.perPage}&cur_page=${pagination.curPage}`,
+            `products?per_page=${pagination.perPage}&cur_page=${pagination.curPage}${keyword ? `&keyword=${keyword}` : ''}`,
             () => this.productService.index(pagination, keyword)
         )
     }
@@ -28,7 +28,14 @@ export default class ProductsController {
     /**
      * Display form to create a new record
      */
-    async create({}: HttpContext) {}
+    async create({ params, pagination }: HttpContext) {
+        return this.redisService.get(
+            `stores/${params.store_id}/products/create?per_page=${pagination.perPage}&cur_page=${pagination.curPage}`,
+            () => {
+                return this.productService.create(params.store_id, pagination)
+            }
+        )
+    }
 
     /**
      * Handle form submission for the create action
@@ -97,6 +104,7 @@ export default class ProductsController {
                         part,
                         'products'
                     )
+                    console.log(uploadResponse)
                     cloudinaryResponse = uploadResponse
                 }
             }
@@ -117,5 +125,7 @@ export default class ProductsController {
     /**
      * Delete record
      */
-    // async destroy({ params }: HttpContext) {}
+    async destroy({ params, auth }: HttpContext) {
+        return this.productService.destroy(auth.user as User, params.store_id, params.id)
+    }
 }

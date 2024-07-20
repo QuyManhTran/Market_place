@@ -22,6 +22,7 @@ const Profile = () => {
     const [name, setName] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
     const [updateLoading, setUpdateLoading] = useState<boolean>(false);
+    const [updateAvatarLoading, setUpdateAvatarLoading] = useState<boolean>(false);
     useEffect(() => {
         if (user?.user?.user?.username) {
             setName(user.user.user.username);
@@ -34,6 +35,7 @@ const Profile = () => {
         console.log(file);
         formData.append('avatar', file as Blob);
         try {
+            setUpdateAvatarLoading(true);
             const response = await updateAvatar(formData);
             if (!response.data.data?.avatar) {
                 throw new Error('Update avatar failed');
@@ -44,6 +46,8 @@ const Profile = () => {
         } catch (error) {
             console.error(error);
             message.error('Update avatar failed');
+        } finally {
+            setUpdateAvatarLoading(false);
         }
     };
 
@@ -152,6 +156,7 @@ const Profile = () => {
                             size="large"
                             disabled={imageUrl ? false : true}
                             onClick={uploadHandler}
+                            loading={updateAvatarLoading}
                         >
                             Update Avatar
                         </Button>

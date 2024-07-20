@@ -1,6 +1,8 @@
 #start
 FROM node:20.15.1-alpine as builder
 
+FROM builder as development
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -18,12 +20,11 @@ WORKDIR /app/build
 # Run npm install in /app/build directory
 RUN npm ci --omit="dev"
 
-FROM node:20.15.1-alpine
+FROM builder as production
 
+ENV NODE_ENV=production
 
-COPY --from=builder /app/build /app/build
-
-EXPOSE 3333
+COPY --from=development /app/build /app/build
 
 WORKDIR /app/build
 

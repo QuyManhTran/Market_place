@@ -1,8 +1,8 @@
 import { Layout } from 'antd';
 import React from 'react';
 import HomeHeader from './header';
-import HomeContent from './content';
 import HomeFooter from './footer';
+import { Outlet } from 'react-router-dom';
 
 const layoutStyle: React.CSSProperties = {
     overflow: 'hidden',
@@ -14,8 +14,9 @@ const HomeLayout = () => {
     return (
         <Layout style={layoutStyle}>
             <HomeHeader />
-            <HomeContent />
-            <HomeFooter />
+            <div style={{ paddingTop: 120, backgroundColor: '#fff' }}></div>
+            <Outlet />
+            {/* <HomeFooter /> */}
         </Layout>
     );
 };

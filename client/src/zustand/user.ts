@@ -1,3 +1,4 @@
+import { UserRoles } from '@/enums/user';
 import { IUserState } from '@/types/user';
 import { create } from 'zustand';
 
@@ -7,6 +8,8 @@ export interface IUserStore {
     setAvatar: (data: string) => void;
     setProfile: (data: string) => void;
     topUp: (balance: number) => void;
+    updateRole: (role: UserRoles) => void;
+    refresh: () => void;
 }
 const initialState: IUserState = {
     user: {
@@ -75,5 +78,17 @@ export const userStore = create<IUserStore>((set) => ({
                 user: { ...state.user.user, balance },
             },
         }));
+    },
+    updateRole(role) {
+        set((state) => ({
+            ...state,
+            user: {
+                ...state.user,
+                user: { ...state.user.user, role },
+            },
+        }));
+    },
+    refresh() {
+        set({ user: initialState });
     },
 }));

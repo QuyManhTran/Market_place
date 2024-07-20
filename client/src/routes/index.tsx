@@ -3,12 +3,15 @@ import Order from '@/components/account/order';
 import OrderDetail from '@/components/account/order/order-detail';
 import Privacy from '@/components/account/privacy';
 import Profile from '@/components/account/profile';
+import Store from '@/components/account/store';
 import Wallet from '@/components/account/wallet';
 import Login from '@/components/auths/login';
 import Register from '@/components/auths/register';
+import HomeContent from '@/layouts/home/content';
 import AccountPage from '@/page/account';
 import AuthPage from '@/page/auth';
 import HomePage from '@/page/home';
+import DetailProduct from '@/page/product';
 import { useRoutes } from 'react-router-dom';
 
 const AppRouter = () => {
@@ -16,6 +19,16 @@ const AppRouter = () => {
         {
             path: '',
             element: <HomePage />,
+            children: [
+                {
+                    path: '',
+                    element: <HomeContent />,
+                },
+                {
+                    path: 'product/:id',
+                    element: <DetailProduct />,
+                },
+            ],
         },
         {
             path: 'auth',
@@ -58,6 +71,10 @@ const AppRouter = () => {
                 {
                     path: 'order/:id',
                     element: <OrderDetail />,
+                },
+                {
+                    path: 'store',
+                    element: <Store />,
                 },
             ],
         },

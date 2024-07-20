@@ -101,4 +101,21 @@ export default class UserService {
             },
         }
     }
+
+    async getMyStore(user: User) {
+        const store = await user.related('store').query().first()
+        if (!store) {
+            return {
+                result: false,
+                message: 'You do not have a store',
+            }
+        }
+
+        return {
+            result: true,
+            data: {
+                store: store?.serialize(),
+            },
+        }
+    }
 }
