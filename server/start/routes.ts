@@ -36,8 +36,9 @@ router
             .group(() => {
                 router.post('/register', [AuthController, 'register'])
                 router.post('/login', [AuthController, 'login'])
+                router.post('/refresh', [AuthController, 'refresh'])
                 router
-                    .post('/refresh', [AuthController, 'refresh'])
+                    .delete('/logout', [AuthController, 'logout'])
                     .use(middleware.auth({ guards: ['api'] }))
             })
             .prefix('/auth')
@@ -50,10 +51,11 @@ router
                     .group(() => {
                         router.patch('/profile', [UsersController, 'updateProfile'])
                         router.patch('/image', [UsersController, 'updateImage'])
-                        router.patch('/topup', [UsersController, 'topUp'])
+                        router.post('/topup', [UsersController, 'topUp'])
                     })
                     .prefix('/edit')
                 router.get('/search', [UsersController, 'search']).use(middleware.pagination())
+                router.get('/my-store', [UsersController, 'getMyStore'])
             })
             .prefix('/users')
             .use([
@@ -101,19 +103,20 @@ router
                     middleware.role({ roles: [UserRoles.SELLER] }),
                 ]
             )
-            .use(
-                ['index'],
-                [
-                    middleware.auth({ guards: ['api'] }),
-                    middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
-                    middleware.pagination(),
-                ]
-            )
+            .use(['index'], [middleware.pagination()])
             .use(
                 ['show'],
                 [
                     middleware.auth({ guards: ['api'] }),
                     middleware.role({ roles: [UserRoles.USER, UserRoles.SELLER] }),
+                ]
+            )
+            .use(
+                ['create', 'destroy'],
+                [
+                    middleware.auth({ guards: ['api'] }),
+                    middleware.role({ roles: [UserRoles.SELLER] }),
+                    middleware.pagination(),
                 ]
             )
 

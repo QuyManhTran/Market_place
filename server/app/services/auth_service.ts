@@ -18,15 +18,10 @@ export default class AuthService {
         await user.related('cart').create({
             total: 0,
         })
-        await user.load('profile', (builder) => {
-            builder.preload('avatar')
-            builder.preload('background')
-        })
+
         return {
             result: true,
-            data: {
-                user: user,
-            },
+            message: 'User registered successfully',
         }
     }
 
@@ -46,7 +41,7 @@ export default class AuthService {
         return {
             result: true,
             data: {
-                user: user,
+                user,
                 accessToken: accessToken.toJSON(),
             },
         }
@@ -65,7 +60,11 @@ export default class AuthService {
         const user = await User.findOrFail(payload.id)
         const accessToken = await User.accessTokens.create(user)
         console.log(accessToken)
-        return { result: true, data: { accessToken: accessToken.toJSON() } }
+        await user.load('profile', (builder) => {
+            builder.preload('avatar')
+            builder.preload('background')
+        })
+        return { result: true, data: { user, accessToken: accessToken.toJSON() } }
     }
 
     async logout(response: Response) {
