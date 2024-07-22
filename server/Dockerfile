@@ -24,6 +24,8 @@ FROM builder as production
 
 ENV NODE_ENV=production
 
+ENV REDIS_HOST=redis
+
 COPY --from=development /app/build /app/build
 
 WORKDIR /app/build
