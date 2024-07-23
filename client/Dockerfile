@@ -13,20 +13,6 @@ COPY . .
 
 RUN npm run build
 
-
-# Stage using server
-# FROM builder as production
-
-# WORKDIR /app
-
-# RUN npm install -g serve
-
-# COPY --from=development /app/build /app/build
-
-# CMD ["serve", "-s", "build" ]
-
-# Stage using nginx
-
 FROM nginx:1.27.0-alpine-slim as production
 
 COPY --from=development /app/build /usr/share/nginx/html/react
