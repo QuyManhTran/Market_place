@@ -16,25 +16,27 @@ services:
             context: ./server
             dockerfile: Dockerfile
         ports:
-            - "3333:3333"
+            - "3333"
+            - "3334"
+            - "3335"
         networks:
             - market_place
-        depends_on:
-            - mysql
-    mysql:
-        container_name: mysql
-        image: mysql
-        env_file:
-            - ./server/.env
-        environment:
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-            MYSQL_DATABASE: ${DB_DATABASE}
-        expose:
-            - "3306"
-        networks:
-            - market_place
-        volumes:
-            - mysql_data:/var/lib/mysql
+        # depends_on:
+        #     - mysql
+    # mysql:
+    #     container_name: mysql
+    #     image: mysql
+    #     env_file:
+    #         - ./server/.env
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    #         MYSQL_DATABASE: ${DB_DATABASE}
+    #     expose:
+    #         - "3306"
+    #     networks:
+    #         - market_place
+    #     volumes:
+    #         - mysql_data:/var/lib/mysql
     redis:
         container_name: redis
         image: redis:7.2.5-alpine

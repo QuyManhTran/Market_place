@@ -1,0 +1,34 @@
+services:
+    client:
+        container_name: react
+        env_file:
+            - .env
+        image: ${CLIENT_IMAGE}
+        ports:
+            - "80:80"
+        depends_on:
+            - server
+        networks:
+            - market_place
+    server:
+        container_name: server
+        env_file:
+            - .env
+        image: ${SERVER_IMAGE}
+        ports:
+            - "3333"
+        networks:
+            - market_place
+        depends_on:
+            - redis
+    redis:
+        container_name: redis
+        image: redis:7.2.5-alpine
+        expose:
+            - "6379"
+        networks:
+            - market_place
+        command: redis-server --appendonly yes
+networks:
+    market_place:
+        driver: bridge

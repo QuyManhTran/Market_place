@@ -26,7 +26,7 @@ ENV NODE_ENV=production
 
 ENV REDIS_HOST=redis
 
-ENV DB_HOST=mysql
+# ENV DB_HOST=mysql
 
 COPY --from=development /app/build /app/build
 
