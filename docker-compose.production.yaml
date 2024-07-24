@@ -1,6 +1,6 @@
 services:
     client:
-        container_name: react
+        container_name: client
         env_file:
             - .env
         image: ${CLIENT_IMAGE}
