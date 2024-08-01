@@ -15,6 +15,7 @@ export default class AuthController {
     }
 
     async login({ request, response }: HttpContext) {
+        // LoginAuth
         const rawData = request.only(['email', 'password'])
         const data = await loginAuthValidator.validate(rawData)
         return this.authService.login({ data, response })
