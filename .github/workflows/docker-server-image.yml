@@ -29,6 +29,6 @@ jobs:
               uses: docker/build-push-action@v6
               with:
                   context: ./server
-                  file: Dockerfile.production
+                  file: ./server/Dockerfile.production
                   push: true
                   tags: quymanh/market-place:server-latest
