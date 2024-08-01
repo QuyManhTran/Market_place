@@ -13,18 +13,8 @@ COPY . .
 
 RUN npm run build
 
+FROM nginx:1.27.0-alpine-slim as production
 
-# Stage
-FROM builder as production
+COPY --from=development /app/build /usr/share/nginx/html/react
 
-WORKDIR /app
-
-RUN npm install -g serve
-
-COPY --from=development /app/build /app/build
-
-CMD ["serve", "-s", "build" ]
-
-
-
-
+CMD ["nginx", "-g", "daemon off;"]
