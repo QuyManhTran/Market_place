@@ -30,5 +30,6 @@ services:
             - market_place
         command: redis-server --appendonly yes
 networks:
+    default:
     market_place:
         driver: bridge

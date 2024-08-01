@@ -1,42 +1,28 @@
 services:
     client:
-        container_name: react
+        container_name: client
         build:
             context: ./client
             dockerfile: Dockerfile
         ports:
-            - "3000:80"
+            - "80:80"
         depends_on:
             - server
         networks:
             - market_place
     server:
-        container_name: node
+        container_name: server
+        env_file:
+            - path: ./server/.env.production
         build:
             context: ./server
             dockerfile: Dockerfile
         ports:
             - "3333"
-            - "3334"
-            - "3335"
         networks:
             - market_place
-        # depends_on:
-        #     - mysql
-    # mysql:
-    #     container_name: mysql
-    #     image: mysql
-    #     env_file:
-    #         - ./server/.env
-    #     environment:
-    #         MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-    #         MYSQL_DATABASE: ${DB_DATABASE}
-    #     expose:
-    #         - "3306"
-    #     networks:
-    #         - market_place
-    #     volumes:
-    #         - mysql_data:/var/lib/mysql
+        depends_on:
+            - redis
     redis:
         container_name: redis
         image: redis:7.2.5-alpine
@@ -48,6 +34,3 @@ services:
 networks:
     market_place:
         driver: bridge
-volumes:
-    mysql_data:
-        driver: local
