@@ -4,6 +4,8 @@ services:
         build:
             context: ./client
             dockerfile: Dockerfile
+        env_file:
+            - path: ./client/.env.local
         ports:
             - "80:80"
         depends_on:
