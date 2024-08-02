@@ -17,18 +17,18 @@ const Login: React.FC = () => {
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const navigate = useNavigate();
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        console.log('Success:', values);
+        //console.log('Success:', values);
         try {
             setLoading(true);
             const response = await login({ ...values });
-            console.log(response.data);
+            //console.log(response.data);
             if (!response.data.result) throw new Error(response.data?.message);
             setUser(response.data.data as IUserState);
             message.success('Login successfully !');
             setIsSuccess(true);
             navigate('/');
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             message.error('Login failed !');
         } finally {
             setLoading(false);
@@ -36,7 +36,7 @@ const Login: React.FC = () => {
     };
 
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        //console.log('Failed:', errorInfo);
     };
     return (
         <>

@@ -24,8 +24,8 @@ export default class StoreService {
     }
 
     async update({ description, storeName }: UpdateStore, user: User, storeId: number) {
-        console.log('storeid', storeId)
-        console.log('userId', user.id)
+        //console.log('storeid', storeId)
+        //console.log('userId', user.id)
         const store: Store = await Store.findByOrFail({ id: storeId, sellerId: user.id })
         if (storeName) store.storeName = storeName
         if (description) store.description = description

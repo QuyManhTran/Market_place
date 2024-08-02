@@ -59,7 +59,7 @@ export default class AuthService {
         }
         const user = await User.findOrFail(payload.id)
         const accessToken = await User.accessTokens.create(user)
-        console.log(accessToken)
+        //console.log(accessToken)
         await user.load('profile', (builder) => {
             builder.preload('avatar')
             builder.preload('background')

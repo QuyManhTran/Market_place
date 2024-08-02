@@ -22,7 +22,7 @@ export const updateAvatar = async (formData: FormData) => {
 };
 
 export const updateProfile = async (data: IUpdateProfile) => {
-    console.log(data);
+    //console.log(data);
     return request.patch<updateProfileResponse>('/users/edit/profile', data);
 };
 

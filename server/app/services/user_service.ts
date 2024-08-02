@@ -32,7 +32,7 @@ export default class UserService {
             const avatar = await Avatar.findByOrFail('profile_id', profile.id)
             if (avatar.publicId) {
                 const response = await this.cloudinaryService.deleteImage(avatar.publicId)
-                console.log(response)
+                //console.log(response)
             }
             await avatar
                 .merge({
@@ -50,7 +50,7 @@ export default class UserService {
         const background = await Background.findByOrFail('profile_id', profile.id)
         if (background.publicId) {
             const response = await this.cloudinaryService.deleteImage(background.publicId)
-            console.log(response)
+            //console.log(response)
         }
         await background
             .merge({

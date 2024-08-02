@@ -32,7 +32,6 @@ const Profile = () => {
 
     const uploadHandler = async () => {
         const formData = new FormData();
-        console.log(file);
         formData.append('avatar', file as Blob);
         try {
             setUpdateAvatarLoading(true);
@@ -40,11 +39,9 @@ const Profile = () => {
             if (!response.data.data?.avatar) {
                 throw new Error('Update avatar failed');
             }
-            console.log(response.data.data.avatar);
             user.setAvatar(response.data.data.avatar);
             message.success('Update avatar success');
         } catch (error) {
-            console.error(error);
             message.error('Update avatar failed');
         } finally {
             setUpdateAvatarLoading(false);
@@ -127,7 +124,7 @@ const Profile = () => {
                             name="avatar"
                             showUploadList={false}
                             beforeUpload={(file) => {
-                                console.log(file);
+                                //console.log(file);
                                 const isJpgOrPng =
                                     file.type === 'image/jpeg' || file.type === 'image/png';
                                 if (!isJpgOrPng) {

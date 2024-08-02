@@ -20,7 +20,7 @@ export const OrderDetail = () => {
                 setData(response.data.data?.order);
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         } finally {
             setLoading(false);
         }

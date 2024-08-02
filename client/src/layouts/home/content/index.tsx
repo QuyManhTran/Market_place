@@ -35,7 +35,7 @@ const HomeContent = () => {
                 setMeta(response.data.data.products.meta);
             }
         } catch (error) {
-            console.log('fetchProducts -> error', error);
+            //console.log('fetchProducts -> error', error);
         } finally {
             setLoading(false);
         }

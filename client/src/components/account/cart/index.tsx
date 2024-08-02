@@ -15,7 +15,6 @@ const Cart = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
     const createOrderHandler = async () => {
         try {
             setLoading(true);
@@ -24,7 +23,6 @@ const Cart = () => {
             message.success('Order created successfully');
             removeCart();
         } catch (error: any) {
-            console.log(error?.response?.data?.message);
             message.error(error?.response?.data?.message || error?.message);
         } finally {
             setLoading(false);
