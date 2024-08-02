@@ -7,7 +7,7 @@ services:
         env_file:
             - path: ./client/.env.local
         ports:
-            - "80:444"
+            - "80:80"
         depends_on:
             - server
         networks:
