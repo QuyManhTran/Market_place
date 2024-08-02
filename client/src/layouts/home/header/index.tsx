@@ -127,10 +127,6 @@ const HomeHeader = () => {
         try {
             const response = await searchProduct({ cur_page: 1, per_page: 5 }, keyword);
             if (response.data.result && response.data?.data) {
-                //console.log(
-                    'fetchProducts -> response.data.data.products.data',
-                    response.data.data.products.data,
-                );
                 setProducts(response.data.data.products.data);
                 setIsOpenSearch(true);
             }
