@@ -120,7 +120,7 @@ const ProductForm: FC<ProductFormProps> = ({ isModalVisible, onCancel, storeId, 
                 >
                     <Upload
                         beforeUpload={(file) => {
-                            console.log(file);
+                            //console.log(file);
                             const isJpgOrPng =
                                 file.type === 'image/jpeg' || file.type === 'image/png';
                             if (!isJpgOrPng) {

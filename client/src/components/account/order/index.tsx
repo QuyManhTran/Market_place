@@ -92,7 +92,7 @@ const Order = () => {
                 })),
             );
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         } finally {
             setLoading(false);
         }

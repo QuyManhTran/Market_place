@@ -127,7 +127,7 @@ const HomeHeader = () => {
         try {
             const response = await searchProduct({ cur_page: 1, per_page: 5 }, keyword);
             if (response.data.result && response.data?.data) {
-                console.log(
+                //console.log(
                     'fetchProducts -> response.data.data.products.data',
                     response.data.data.products.data,
                 );
@@ -135,7 +135,7 @@ const HomeHeader = () => {
                 setIsOpenSearch(true);
             }
         } catch (error) {
-            console.log('fetchProducts -> error', error);
+            //console.log('fetchProducts -> error', error);
         }
     };
 
@@ -188,7 +188,7 @@ const HomeHeader = () => {
                 throw Error('Create store failed');
             }
         } catch (error) {
-            console.log('onOk -> error', error);
+            //console.log('onOk -> error', error);
             message.error('Create store failed');
         } finally {
             setLoadingForm(false);

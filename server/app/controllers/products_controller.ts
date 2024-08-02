@@ -58,7 +58,7 @@ export default class ProductsController {
         )
 
         await request.multipart.process()
-        console.log(cloudinaryResponse)
+        //console.log(cloudinaryResponse)
         if (cloudinaryResponse === null) return response.internalServerError()
         const rawData = request.only(['name', 'description', 'price', 'status'])
         const data = await productValidator.validate(rawData)
@@ -104,7 +104,7 @@ export default class ProductsController {
                         part,
                         'products'
                     )
-                    console.log(uploadResponse)
+                    //console.log(uploadResponse)
                     cloudinaryResponse = uploadResponse
                 }
             }

@@ -50,7 +50,7 @@ export default class ProductService {
         if (cloudinaryResponse) {
             const image = await ProductImage.findBy({ productId: product.id })
             if (!image) {
-                console.log('not exits yet')
+                //console.log('not exits yet')
                 await product.related('image').create({
                     publicId: cloudinaryResponse.public_id,
                     url: cloudinaryResponse.secure_url,
@@ -64,7 +64,7 @@ export default class ProductService {
                     })
                     ?.save()
                 const result = await this.cloudinaryService.deleteImage(oldPublicId)
-                console.log(result)
+                //console.log(result)
             }
         }
         await product.load('image')

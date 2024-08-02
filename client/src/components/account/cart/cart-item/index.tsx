@@ -14,7 +14,6 @@ const CartItem: FC<ICartItemProps> = ({ item, cartId, removeItem }) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const handleCancel = useCallback(() => {
-        console.log('Clicked cancel button');
         setOpen(false);
     }, []);
     const removeHandler = useCallback(async (itemId: number, price: number) => {

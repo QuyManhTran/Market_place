@@ -64,7 +64,7 @@ const Store = () => {
                 per_page: limit,
             });
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         } finally {
             setLoading(false);
         }
@@ -330,7 +330,7 @@ const Store = () => {
                         >
                             <Upload
                                 beforeUpload={(file) => {
-                                    console.log(file);
+                                    //console.log(file);
                                     const isJpgOrPng =
                                         file.type === 'image/jpeg' || file.type === 'image/png';
                                     if (!isJpgOrPng) {

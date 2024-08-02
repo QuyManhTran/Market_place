@@ -40,7 +40,7 @@ const DetailProduct = () => {
             const response = await getProduct(storeId, id);
             if (response.data.result) setProduct(response.data?.data?.product);
         } catch (error) {
-            console.log('fetchProduct -> error', error);
+            //console.log('fetchProduct -> error', error);
             message.error('Fetch product failed !');
         } finally {
             setLoading(false);

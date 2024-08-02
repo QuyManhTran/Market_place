@@ -14,14 +14,14 @@ const Register: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        console.log('Success:', values);
+        //console.log('Success:', values);
         try {
             setLoading(true);
             const response = await register({ ...values });
-            console.log(response.data);
+            //console.log(response.data);
             message.success('Register successfully !');
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             message.error('Register failed !');
         } finally {
             setLoading(false);
@@ -29,7 +29,7 @@ const Register: React.FC = () => {
     };
 
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        //console.log('Failed:', errorInfo);
     };
 
     return (
