@@ -69,8 +69,7 @@
         "luxon": "^3.4.4",
         "mysql2": "^3.10.2",
         "parse-duration": "^1.1.0",
-        "reflect-metadata": "^0.2.2",
-        "server": "file:"
+        "reflect-metadata": "^0.2.2"
     },
     "hotHook": {
         "boundaries": [
