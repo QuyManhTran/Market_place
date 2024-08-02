@@ -11,7 +11,7 @@ import { UserRoles } from './enums/user';
 const App = () => {
     const { user, setUser } = userStore();
     const { setCart } = cartStore();
-    const { addStore } = menuStore();
+    const { addStore, items } = menuStore();
     const refreshToken = async () => {
         try {
             const response = await refresh();
@@ -38,7 +38,9 @@ const App = () => {
         if (!user.accessToken.token) refreshToken();
         else {
             refreshCart(user.user.id);
-            if (user.user.role === UserRoles.SELLER) addStore();
+            if (user.user.role === UserRoles.SELLER && items.length === 3) {
+                addStore();
+            }
         }
     }, [user]);
 
